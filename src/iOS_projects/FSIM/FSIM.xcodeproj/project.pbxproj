@@ -1,0 +1,467 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A485152A1B4BE15D00B4219D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48515291B4BE15D00B4219D /* AppDelegate.swift */; };
+		A485152C1B4BE15D00B4219D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A485152B1B4BE15D00B4219D /* ViewController.swift */; };
+		A485152F1B4BE15D00B4219D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A485152D1B4BE15D00B4219D /* Main.storyboard */; };
+		A48515311B4BE15D00B4219D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A48515301B4BE15D00B4219D /* Images.xcassets */; };
+		A48515341B4BE15D00B4219D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A48515321B4BE15D00B4219D /* LaunchScreen.xib */; };
+		A48515401B4BE15D00B4219D /* FSIMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A485153F1B4BE15D00B4219D /* FSIMTests.swift */; };
+		A48515531B4BE2CA00B4219D /* testFSIM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48515521B4BE2CA00B4219D /* testFSIM.swift */; };
+		A48515551B4BE33000B4219D /* providerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48515541B4BE33000B4219D /* providerData.swift */; };
+		A48515701B4BE5B200B4219D /* Reachability-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A485156C1B4BE5B200B4219D /* Reachability-Info.plist */; };
+		A485157C1B4BE64E00B4219D /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = A485157B1B4BE64E00B4219D /* Reachability.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A485153A1B4BE15D00B4219D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A485151C1B4BE15D00B4219D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A48515231B4BE15D00B4219D;
+			remoteInfo = FSIM;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A48515241B4BE15D00B4219D /* FSIM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FSIM.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A48515281B4BE15D00B4219D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A48515291B4BE15D00B4219D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A485152B1B4BE15D00B4219D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A485152E1B4BE15D00B4219D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A48515301B4BE15D00B4219D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		A48515331B4BE15D00B4219D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		A48515391B4BE15D00B4219D /* FSIMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FSIMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A485153E1B4BE15D00B4219D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A485153F1B4BE15D00B4219D /* FSIMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSIMTests.swift; sourceTree = "<group>"; };
+		A48515521B4BE2CA00B4219D /* testFSIM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testFSIM.swift; sourceTree = "<group>"; };
+		A48515541B4BE33000B4219D /* providerData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = providerData.swift; sourceTree = "<group>"; };
+		A485156C1B4BE5B200B4219D /* Reachability-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Reachability-Info.plist"; sourceTree = "<group>"; };
+		A485156D1B4BE5B200B4219D /* Reachability-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Reachability-Prefix.pch"; sourceTree = "<group>"; };
+		A48515791B4BE64E00B4219D /* FSIM-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FSIM-Bridging-Header.h"; sourceTree = "<group>"; };
+		A485157A1B4BE64E00B4219D /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		A485157B1B4BE64E00B4219D /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A48515211B4BE15D00B4219D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A48515361B4BE15D00B4219D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A485151B1B4BE15D00B4219D = {
+			isa = PBXGroup;
+			children = (
+				A48515261B4BE15D00B4219D /* FSIM */,
+				A485153C1B4BE15D00B4219D /* FSIMTests */,
+				A48515251B4BE15D00B4219D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A48515251B4BE15D00B4219D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A48515241B4BE15D00B4219D /* FSIM.app */,
+				A48515391B4BE15D00B4219D /* FSIMTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A48515261B4BE15D00B4219D /* FSIM */ = {
+			isa = PBXGroup;
+			children = (
+				A48515541B4BE33000B4219D /* providerData.swift */,
+				A48515291B4BE15D00B4219D /* AppDelegate.swift */,
+				A485152B1B4BE15D00B4219D /* ViewController.swift */,
+				A485152D1B4BE15D00B4219D /* Main.storyboard */,
+				A48515301B4BE15D00B4219D /* Images.xcassets */,
+				A48515321B4BE15D00B4219D /* LaunchScreen.xib */,
+				A48515271B4BE15D00B4219D /* Supporting Files */,
+			);
+			path = FSIM;
+			sourceTree = "<group>";
+		};
+		A48515271B4BE15D00B4219D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A485157A1B4BE64E00B4219D /* Reachability.h */,
+				A485157B1B4BE64E00B4219D /* Reachability.m */,
+				A485156C1B4BE5B200B4219D /* Reachability-Info.plist */,
+				A485156D1B4BE5B200B4219D /* Reachability-Prefix.pch */,
+				A48515281B4BE15D00B4219D /* Info.plist */,
+				A48515791B4BE64E00B4219D /* FSIM-Bridging-Header.h */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A485153C1B4BE15D00B4219D /* FSIMTests */ = {
+			isa = PBXGroup;
+			children = (
+				A48515521B4BE2CA00B4219D /* testFSIM.swift */,
+				A485153F1B4BE15D00B4219D /* FSIMTests.swift */,
+				A485153D1B4BE15D00B4219D /* Supporting Files */,
+			);
+			path = FSIMTests;
+			sourceTree = "<group>";
+		};
+		A485153D1B4BE15D00B4219D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A485153E1B4BE15D00B4219D /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A48515231B4BE15D00B4219D /* FSIM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A48515431B4BE15D00B4219D /* Build configuration list for PBXNativeTarget "FSIM" */;
+			buildPhases = (
+				A48515201B4BE15D00B4219D /* Sources */,
+				A48515211B4BE15D00B4219D /* Frameworks */,
+				A48515221B4BE15D00B4219D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FSIM;
+			productName = FSIM;
+			productReference = A48515241B4BE15D00B4219D /* FSIM.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A48515381B4BE15D00B4219D /* FSIMTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A48515461B4BE15D00B4219D /* Build configuration list for PBXNativeTarget "FSIMTests" */;
+			buildPhases = (
+				A48515351B4BE15D00B4219D /* Sources */,
+				A48515361B4BE15D00B4219D /* Frameworks */,
+				A48515371B4BE15D00B4219D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A485153B1B4BE15D00B4219D /* PBXTargetDependency */,
+			);
+			name = FSIMTests;
+			productName = FSIMTests;
+			productReference = A48515391B4BE15D00B4219D /* FSIMTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A485151C1B4BE15D00B4219D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 0720;
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Nir Berman";
+				TargetAttributes = {
+					A48515231B4BE15D00B4219D = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					A48515381B4BE15D00B4219D = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = A48515231B4BE15D00B4219D;
+					};
+				};
+			};
+			buildConfigurationList = A485151F1B4BE15D00B4219D /* Build configuration list for PBXProject "FSIM" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A485151B1B4BE15D00B4219D;
+			productRefGroup = A48515251B4BE15D00B4219D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A48515231B4BE15D00B4219D /* FSIM */,
+				A48515381B4BE15D00B4219D /* FSIMTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A48515221B4BE15D00B4219D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A485152F1B4BE15D00B4219D /* Main.storyboard in Resources */,
+				A48515341B4BE15D00B4219D /* LaunchScreen.xib in Resources */,
+				A48515311B4BE15D00B4219D /* Images.xcassets in Resources */,
+				A48515701B4BE5B200B4219D /* Reachability-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A48515371B4BE15D00B4219D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A48515201B4BE15D00B4219D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A485152C1B4BE15D00B4219D /* ViewController.swift in Sources */,
+				A48515551B4BE33000B4219D /* providerData.swift in Sources */,
+				A485157C1B4BE64E00B4219D /* Reachability.m in Sources */,
+				A485152A1B4BE15D00B4219D /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A48515351B4BE15D00B4219D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A48515531B4BE2CA00B4219D /* testFSIM.swift in Sources */,
+				A48515401B4BE15D00B4219D /* FSIMTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A485153B1B4BE15D00B4219D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A48515231B4BE15D00B4219D /* FSIM */;
+			targetProxy = A485153A1B4BE15D00B4219D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A485152D1B4BE15D00B4219D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A485152E1B4BE15D00B4219D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A48515321B4BE15D00B4219D /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A48515331B4BE15D00B4219D /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A48515411B4BE15D00B4219D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A48515421B4BE15D00B4219D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A48515441B4BE15D00B4219D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = FSIM/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SimGo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FSIM/FSIM-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A48515451B4BE15D00B4219D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = FSIM/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SimGo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FSIM/FSIM-Bridging-Header.h";
+			};
+			name = Release;
+		};
+		A48515471B4BE15D00B4219D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = FSIMTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SimGo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FSIM.app/FSIM";
+			};
+			name = Debug;
+		};
+		A48515481B4BE15D00B4219D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = FSIMTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "SimGo.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FSIM.app/FSIM";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A485151F1B4BE15D00B4219D /* Build configuration list for PBXProject "FSIM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A48515411B4BE15D00B4219D /* Debug */,
+				A48515421B4BE15D00B4219D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A48515431B4BE15D00B4219D /* Build configuration list for PBXNativeTarget "FSIM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A48515441B4BE15D00B4219D /* Debug */,
+				A48515451B4BE15D00B4219D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A48515461B4BE15D00B4219D /* Build configuration list for PBXNativeTarget "FSIMTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A48515471B4BE15D00B4219D /* Debug */,
+				A48515481B4BE15D00B4219D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A485151C1B4BE15D00B4219D /* Project object */;
+}
