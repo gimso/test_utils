@@ -14,12 +14,13 @@ import global.FileUtil;
  */
 public class JsonFileReader {
 	
-	private static String CREATE_ALLOCATION_JSON = System.getProperty("user.dir")+"\\..\\Tests\\files\\GwFiles\\createAllocation.json";
-	private static String AUTHENTICATION_JSON = System.getProperty("user.dir")+"\\..\\Tests\\files\\GwFiles\\authentication.json";
-	private static String UPDATE_JSON = System.getProperty("user.dir")+"\\..\\Tests\\files\\GwFiles\\updateallocation.json";
-	private static String OUTGOING_CALL_JSON = System.getProperty("user.dir")+"\\..\\Tests\\files\\GwFiles\\outgoingcall.json";
-	private static String INCOMING_SMS_JSON = System.getProperty("user.dir")+"\\..\\Tests\\files\\GwFiles\\incomingsms.json";
-	private static String FOTA_STATE_JSON = System.getProperty("user.dir")+"\\..\\Tests\\files\\GwFiles\\fotastate.json";
+	private static String CREATE_ALLOCATION_JSON = System.getProperty("user.dir")+"\\..\\Gateway\\files\\GwFiles\\createAllocation.json";
+	private static String AUTHENTICATION_JSON = System.getProperty("user.dir")+"\\..\\Gateway\\files\\GwFiles\\authentication.json";
+	private static String UPDATE_JSON = System.getProperty("user.dir")+"\\..\\Gateway\\files\\GwFiles\\updateallocation.json";
+	private static String OUTGOING_CALL_JSON = System.getProperty("user.dir")+"\\..\\Gateway\\files\\GwFiles\\outgoingcall.json";
+	private static String INCOMING_SMS_JSON = System.getProperty("user.dir")+"\\..\\Gateway\\files\\GwFiles\\incomingsms.json";
+	private static String FOTA_STATE_JSON = System.getProperty("user.dir")+"\\..\\Gateway\\files\\GwFiles\\fotastate.json";
+	private static String DATA_USAGE_JSON = System.getProperty("user.dir")+"\\..\\Gateway\\files\\GwFiles\\datausage.json";
 	private static String data;	
 	private static JsonObject fullJson;
 	static JsonParser JSON_PARSER = new JsonParser();
@@ -420,4 +421,78 @@ public class JsonFileReader {
 		fullJson.addProperty("component_version", "3.0.0");
 		return fullJson.toString();
 	}
+	
+	/**
+	 * Get datausage.json file 
+	 */
+	public static String dataUsageFile() {
+		File file = new File(DATA_USAGE_JSON);
+		data = FileUtil.readFromFile(file);
+		return data;
+	}
+	
+	/**
+	 * Get datausage.json file with current timestamp
+	 */
+	public static String dataUsageTimestampFile() {
+		long date = System.currentTimeMillis() / 1000L;
+		data = FileUtil.readFromFile(new File(DATA_USAGE_JSON));
+		fullJson =  (JsonObject) JSON_PARSER.parse(data);		
+		fullJson.addProperty("timestamp", date);
+		return fullJson.toString();
+	}
+	
+	/**
+	 * Get datausage.json file with current timestamp
+	 */
+	public static String dataUsageMandatoryValuesFile() {
+		long date = System.currentTimeMillis() / 1000L;
+		data = FileUtil.readFromFile(new File(DATA_USAGE_JSON));
+		fullJson =  (JsonObject) JSON_PARSER.parse(data);		
+		fullJson.addProperty("timestamp", date);
+		JsonArray usages = fullJson.getAsJsonArray("usages");			
+		JsonObject usageObj = usages.get(0).getAsJsonObject();
+		usageObj.remove("usage");
+		usageObj.remove("imsi");
+		usageObj.remove("m2m_network");
+		return fullJson.toString();
+	}
+	
+	/**
+	 * Get datausage.json file without the timestamp
+	 */
+	public static String dataUsageWithoutTimestampFile() {
+		data = FileUtil.readFromFile(new File(DATA_USAGE_JSON));
+		fullJson =  (JsonObject) JSON_PARSER.parse(data);		
+		fullJson.remove("timestamp");
+		return fullJson.toString();
+	}
+	
+	/**
+	 * Get datausage.json file with current timestamp, and without "usages"
+	 */
+	public static String dataUsageWithoutUsagesFile() {
+		long date = System.currentTimeMillis() / 1000L;
+		data = FileUtil.readFromFile(new File(DATA_USAGE_JSON));
+		fullJson =  (JsonObject) JSON_PARSER.parse(data);	
+		fullJson.addProperty("timestamp", date);
+		fullJson.remove("usages");
+		return fullJson.toString();
+	}
+	
+	/**
+	 * Get datausage.json file with current timestamp, without "mcc" inside "m2m_network"
+	 */
+	public static String dataUsageWithoutMccFile() {
+		long date = System.currentTimeMillis() / 1000L;
+		data = FileUtil.readFromFile(new File(DATA_USAGE_JSON));
+		fullJson =  (JsonObject) JSON_PARSER.parse(data);	
+		fullJson.addProperty("timestamp", date);
+		JsonArray usages = fullJson.getAsJsonArray("usages");			
+		JsonObject usageObj = usages.get(0).getAsJsonObject();
+		JsonObject m2mNetwork = usageObj.getAsJsonObject("m2m_network");
+		m2mNetwork.remove("mcc");
+		return fullJson.toString();
+	}
+
 }
