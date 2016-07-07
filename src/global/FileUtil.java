@@ -2,7 +2,6 @@ package global;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 
@@ -35,30 +33,29 @@ public class FileUtil {
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			StringBuilder sb = new StringBuilder();
 			String line = br.readLine();
-			
+
 			while (line != null) {
 				sb.append(line);
 				sb.append(System.lineSeparator());
 				line = br.readLine();
-			}		
+			}
 			return sb.toString();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	/**
 	 * using Apache org.apache.commons.io.FileUtils get list from file
-	 * @param file 
+	 * 
+	 * @param file
 	 * @return List of String
 	 */
 	public static List<String> listFromFile(File file) {
 		boolean isFileExistAndHasDataInit = false;
 		try {
-			 isFileExistAndHasDataInit = 
-					file != null 
-					&& file.exists()
+			isFileExistAndHasDataInit = file != null && file.exists()
 					&& !FileUtils.readFileToString(file).trim().isEmpty();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -68,7 +65,7 @@ public class FileUtil {
 				return FileUtils.readLines(file);
 			} catch (IOException e) {
 				e.printStackTrace();
-			} 
+			}
 		}
 		return null;
 	}
@@ -88,7 +85,7 @@ public class FileUtil {
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
 			while ((line = bufferedReader.readLine()) != null) {
 				// if line is empty do not print new line
-				String data = line.isEmpty() ? "" : line + "\n" ;
+				String data = line.isEmpty() ? "" : line + "\n";
 				FileUtils.writeStringToFile(file, data, true);
 			}
 			return file;
@@ -97,9 +94,11 @@ public class FileUtil {
 			return null;
 		}
 	}
-	
+
 	/**
-	 * get a path A. check if folders are exist if not create them. B.create the file if its not exist
+	 * get a path A. check if folders are exist if not create them. B.create the
+	 * file if its not exist
+	 * 
 	 * @param pathAndTime
 	 * @return
 	 */
@@ -132,8 +131,8 @@ public class FileUtil {
 	/**
 	 * Get a File and split it into byte array accordance to the split
 	 * size.</br>
-	 * Insert all splitting data into {@link beans.FilePacket} objects and them to a
-	 * list
+	 * Insert all splitting data into {@link beans.FilePacket} objects and them
+	 * to a list
 	 * 
 	 * @param originalFile
 	 * @param splitSize
@@ -158,34 +157,31 @@ public class FileUtil {
 				splitSize = src.length - index;
 			byte[] dest = new byte[splitSize];
 			System.arraycopy(src, index, dest, 0, splitSize);
-			FilePacket ffp = new FilePacket(src.length, dest.length, index, dest,
-					originalFile.getAbsolutePath());
+			FilePacket ffp = new FilePacket(src.length, dest.length, index, dest, originalFile.getAbsolutePath());
 			filePackets.add(ffp);
 			index = index + splitSize;
 		}
 
 		return filePackets;
 	}
-	
+
 	/**
-	 * Check if String exist in file - return boolean and print error message if needed
+	 * Check if String exist in file - return boolean and print error message if
+	 * needed
+	 * 
 	 * @param file
 	 * @param string
 	 * @return boolean
 	 */
 	public static boolean isStringExistInFile(File file, String string) {
-		try {
-		    @SuppressWarnings("resource")
-			Scanner scanner = new Scanner(file);
-		    while (scanner.hasNextLine()) {
-		        String line = scanner.nextLine();
-		        if(line.toLowerCase().contains(string.toLowerCase()))  
-		            return true;
-		    }
-		} catch(FileNotFoundException e) { 
-		    e.printStackTrace();
+		List<String> listFromFile = listFromFile(file);
+		for (String line : listFromFile) {
+			if (line.toLowerCase().contains(string.toLowerCase())) {
+				System.out.println("String " + string + " Found in Line: \n" + line);
+				return true;
+			}
 		}
-		System.err.println(string + " was not found in" + file.getAbsolutePath());
+		System.err.println(string + " was not found in\n" + file.getAbsolutePath());
 		return false;
 	}
 }

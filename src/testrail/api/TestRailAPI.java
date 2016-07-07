@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -70,7 +71,7 @@ public class TestRailAPI {
 	public static final Long DEFAULT_ASSIGNED_TO_USER = GIMSO_REPORTS;
 
 	// Keys
-	private static final Long DEFAULT_PROJECT_ID = 6l;
+	private static final Long DEFAULT_PROJECT_ID = Long.valueOf(PropertiesUtil.getInstance().getProperty("TEST_RAIL_PROJECT_ID"));
 	private static final String SUITE_ID_KEY = "suite_id";
 	private static final String INCLUDE_ALL_KEY = "include_all";
 	private static final String CASE_IDS_KEY = "case_ids";
