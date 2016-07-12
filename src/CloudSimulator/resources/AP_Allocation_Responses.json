@@ -1,0 +1,42 @@
+{
+  "allocation_response": {
+    "allocation_id": 5,
+    "telephony_numbers": {
+      "incoming_call_an": "97231543756",
+      "outgoing_call_an": "972546668885",
+      "sim_number": "972547376925"
+    },
+    "uicc_specific": {
+      "uicc_files": [
+        {
+          "file_data": "084952107067240677",
+          "file_id": "6F07",
+          "file_path": "7FFF"
+        }
+      ]
+    },
+    "enforcement": {
+      "data_limit": 100,
+      "data_left": 0,
+      "end_date": "2016-06-20 16:55",
+      "throttling_rate": 1
+    },
+    "resp_status": {
+      "code": 0,
+      "info": "Success"
+    },
+    "remote_settings": {
+      "restore_default": false,
+      "wifi_config": {
+        "ssid_prefix": "Simgo",
+        "ssid_postfix": "1013",
+        "password": "123456789",
+        "display_length": 4
+      },
+      "access": {
+        "username": "admin",
+        "password": "admin"
+      }
+    }
+  }
+}

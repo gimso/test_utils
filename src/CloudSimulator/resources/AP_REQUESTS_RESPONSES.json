@@ -1,0 +1,135 @@
+{
+  
+    "challenge_request":{
+  		"ap_id": "1002024",
+ 		"vsim_id": "312341"
+  	},
+  
+  
+  "challenge_response":{
+  		"challenge": "asdf"
+  	},
+  	
+  	
+  	"create_session_request":{
+	  	"ap_id": "100024",
+	  	"vsim_id": "24141",
+	  	"sim_class": "31324",
+	  	"challenge": "",
+	  	"fw_config": "config",
+	  	"vsim_sw_version": "1.1.1",
+	  	"vsim_hw_version": "1.1.1",
+	  	"ap_sw_version": "1.1.1",
+	  	"ap_hw_version": "1.1.1",
+	  	"registration_dsim": "",
+	 	"registration_mode": "1",
+	  	"baseband_type": "1"
+	},
+
+   "create_session_response":{
+	  	"session_id": 100024,
+	  	"sim_digest": "24141",
+	  	"capabilities": 31324,
+	  	"use_hsim": true,
+	  	"fw_update": [{
+			"component": 1,
+			"url": "google.com",
+			"force": false,
+			"version": "1.1.1"
+		}],
+  		"apn": {
+    		"name": "",
+    		"apn": "",
+    		"proxy": "",
+    		"port": "",
+    		"username": "",
+    		"password": "",
+    		"server": "",
+    		"mmsc": "",
+    		"mms_proxy": "12",
+    		"mms_port": "",
+    		"mms_protocol": "",
+    		"mnc": "1",
+    		"mcc": "4",
+    		"authentication_type": "1",
+    		"apn_type": "",
+    		"bearer": "1"
+  		},
+  		"phone_numbers": {
+    		"incoming_access_number": "+97234234",
+    		"sim_number": "314234"
+  		},
+  		"allow_technician_codes": "false",
+  		"outgoing_access_number": "+921414",
+  		"charging_config": "123"
+	},
+   	
+   	
+   "authentication_request":{
+   		"session_id": 1002024,
+ 		"authentication": "24141"
+  	},
+   	
+   "authentication_response":{
+    	"authentication": "24141"
+   	},
+   	
+   	
+   	"delete_session_request":{
+   		"session_id": "1002024"
+   	},
+   	
+   	
+  
+   	"update_request":{
+  		"session_id": "100024",
+  		"dsim_mcc": "123",
+  		"dsim_mnc": "23",
+  		"reception": "12",
+  		"battery_level": "12",
+  		"charging_status": "1",
+  		"auth_counters": "12",
+  		"sim_status": "1"
+	},
+   	
+   	
+   	"update_response":{
+  		"allow_technician_codes": "false",
+  		"fw_update": {
+       		"component": "0",
+       		"url": "google.com",
+       		"force": "true",
+			"version": "1.0.0"
+  		}
+	},
+   	
+   	
+   	
+   	"outgoing_call_request":{
+  		"session_id": "1002024",
+ 		"dest_num": "24141"
+	},
+   	
+   	
+   	"outgoing_call_response":{
+  		"redirect_num": "24141"
+	},
+	
+	
+	"outgoing_sms_request":{
+  		"session_id": 1002024,
+ 		"dest_num": "24141"
+	},
+	
+	"outgoing_sms_response":{
+  		"session_id": "1002024",
+ 		"dest_num": "24141"
+	},
+   	
+   	
+   		"error_response":{
+  		"error": "Plug doesn’t allowed", 
+ 		"allocation_status": "401"
+	}
+   
+}

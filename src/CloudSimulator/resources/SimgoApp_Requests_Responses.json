@@ -1,0 +1,134 @@
+{
+  
+  "login_request":{
+  	"country":"IL",
+  	"device_type":0,
+  	"app_version":"0.7.1"
+  	},
+  
+  
+  "login_response":{
+  	"object":{
+  		"login_phase":1,
+  		"formated_number":"+972542577839"
+  		}
+  	},
+  	
+  	
+  	"verification_code_request":{
+  	"pass":"Your Simgo verification code is 0767",
+  	"country":"IL",
+  	"device_type":0,
+  	"app_version":"0.7.1"
+  	},
+
+
+   "verification_code_response":{
+   	"object":{
+   		"user_name":"tal.h",
+   		"login_phase":2,
+   		"formated_number":"+972542577839",
+   		"user_id": 8
+   		}
+   	},
+   	
+   	
+   "trip_create_request":{
+   	"hnum":"+972542577839",
+  	"plug_id":"000010002039"
+  	},
+   	
+   "trip_create_response":{
+   	"object":{
+   		"trip_id":38,
+   		"plan":{
+   			"calls_limit":60,
+   			"type":0,
+   			"data_limit":100
+   		},
+   		"access_number":"97235555555"
+   		}
+   	},
+   	
+   	"status_report_request":{
+   		"object":{
+   			"status":"",
+   			"DeviceId": "352842061461660",
+   			"Phone": "SM-G900I 5.0",
+   			"RSIM": "972542425133",
+   			"DSIM MCC": "425 425",
+   			"RSIM MCC NAME": "42501 ORANGE",
+   			"CallState": "IDLE",
+   			"DataState": "WIFI",
+   			"Phone Battery": "" ,
+   			"Charging": "Full",
+   			"Phone Reception": "-101dBm",
+   			"Usage: Calls": "0.00min",
+   			"Data": "0.00",
+   			"Trip Usage": "",
+   			"Calls": "0.00min",
+   			 "PTE in:" : "1408min",
+   			"Uptime":"93.9%",
+   			"Runtime":"0:33h",
+   			"Warnings": "0",
+   			"TimeSync": "08 09 15 13:17:01",
+   			"Event ID": "1441707421599",
+   			"battery":"100",
+   			"charging":"3",
+   			"timestamp":"08-09-2015 13:17"
+   		}
+   	},
+   	
+   	"status_report_response":{
+   		"object":{
+   			"allocation":{
+   				"overall_allocations":1,
+   				"is_active":true,
+   				"rsim_number":"972542425133",
+   				"mnc":1,
+   				"mcc":425
+   				},
+   			"usage":{
+   				"calls_usage":0,
+   				"total_data_usage":0,
+   				"data_usage":"0",
+   				"trip_data_usage":0,
+   				"elapsed_billing_cycle":"1871.714366",
+   				"trip_calls_usage":0,
+   				"total_calls_usage":0
+   			},
+   			"plug_status":{
+   				"sw_version":"0.6.21",
+   				"fw_config":"global_dev_sgs5",
+   				"hw_version":"2.0.0"
+   			},
+   			"cloud_time":"08 09 15 10:17:02.714",
+   			"plan":{
+   				"calls_limit":60,
+   				"type":0,
+   				"data_limit":100
+   			}
+   		}
+   	},
+   	
+   	
+   	"gcm_request":{
+   		"object":{
+   			"gcm_key":"APA91bG5tGEgpZieDbHy8yKDhOiBH6yJSQ9VJpg7TDLsn6vOkK5V_1q6cczV5-z3lZAnd9d1KpxvxrhCxFhtklyBHRwOLVcgk51Hg69q7GTo0nbnCh7Pp0ny7iLwGdRttk47ml_UvgpE",
+   			"device_id":"352148074388654",
+   			"device_type":0,
+   			"app_version":"1.0.1",
+   			"hnum":"+972546603703"
+   		}
+   	}
+   	
+   	
+   	"outgoing_calls_request":{
+ 		"object":{
+   			"dest_number":"972558700785"
+   		}
+   	}
+   	
+   	
+   
+}

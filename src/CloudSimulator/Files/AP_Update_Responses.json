@@ -1,0 +1,27 @@
+{
+  "update_response": {
+    "allocation_id": 99,
+    "resp_status": {
+      "code": 0,
+      "info": "Success"
+    },
+    "enforcement": {
+      "data_limit": 100,
+      "data_left": 10,
+      "start_date": "2016-06-20 16:55"
+    },
+    "remote_settings": {
+      "restore_default": false,
+      "wifi_config": {
+        "ssid_prefix": "Simgo",
+        "ssid_postfix": "1013",
+        "password": "123456789",
+        "display_length": 4
+      },
+      "access": {
+        "username": "admin",
+        "password": "admin"
+      }
+    }
+  }
+}
