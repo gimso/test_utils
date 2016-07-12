@@ -1,0 +1,15 @@
+{
+  "authentication_response": {
+    "auth_response": "dc0e6de6c3bd99895453ccde929c1956",
+    "resp_status": {
+      "code": 0,
+      "info": "Success"
+    }
+  },
+  "update_response": {
+    "resp_status": {
+      "code": 0,
+      "info": "Success"
+    }
+  },
+}
