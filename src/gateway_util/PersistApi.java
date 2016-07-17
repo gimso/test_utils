@@ -53,10 +53,10 @@ public class PersistApi {
 	 * @param response
 	 */
 	public void assertCodeAndMultipleResponse(String url, int statusCode, String response1, String response2,
-			String response3, String response4, String response5) {
+			String response3, String response4) {
 		given().when().get(url).then().assertThat().statusCode(statusCode).and().body(containsString(response1)).and()
 				.body(containsString(response2)).and().body(containsString(response3)).and()
-				.body(containsString(response4)).and().body(containsString(response5));
+				.body(containsString(response4));
 	}
 }
 
