@@ -70,6 +70,7 @@ public class RabbitMQUtil {
 		};			
 		try {
 			channel.basicConsume(queueName, true, consumer);
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
