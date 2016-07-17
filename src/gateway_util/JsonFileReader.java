@@ -450,11 +450,8 @@ public class JsonFileReader {
 		data = FileUtil.readFromFile(new File(DATA_USAGE_JSON));
 		fullJson =  (JsonObject) JSON_PARSER.parse(data);		
 		fullJson.addProperty("timestamp", date);
-		JsonArray usages = fullJson.getAsJsonArray("usages");			
-		JsonObject usageObj = usages.get(0).getAsJsonObject();
-		usageObj.remove("usage");
-		usageObj.remove("imsi");
-		usageObj.remove("m2m_network");
+		fullJson.remove("usages");
+		fullJson.add("usages", new JsonArray());
 		return fullJson.toString();
 	}
 	
@@ -477,6 +474,20 @@ public class JsonFileReader {
 		fullJson =  (JsonObject) JSON_PARSER.parse(data);	
 		fullJson.addProperty("timestamp", date);
 		fullJson.remove("usages");
+		return fullJson.toString();
+	}
+	
+	/**
+	 * Get datausage.json file with current timestamp, and without "imsi"
+	 */
+	public static String dataUsageWithoutImsiFile() {
+		long date = System.currentTimeMillis() / 1000L;
+		data = FileUtil.readFromFile(new File(DATA_USAGE_JSON));
+		fullJson =  (JsonObject) JSON_PARSER.parse(data);	
+		fullJson.addProperty("timestamp", date);
+		JsonArray usages = fullJson.getAsJsonArray("usages");
+		JsonObject usageObj = usages.get(0).getAsJsonObject();
+		usageObj.remove("imsi");
 		return fullJson.toString();
 	}
 	
