@@ -129,6 +129,16 @@ public class JsonFileReader {
 		fullJson.addProperty("auth_request", "");
 		return fullJson.toString();
 	}
+	
+	/**
+	 * Get Authentication json file without device_id param
+	 */
+	public static String authenticationWithoutDeviceId() {
+		data = FileUtil.readFromFile(new File(AUTHENTICATION_JSON));
+		fullJson =  (JsonObject) JSON_PARSER.parse(data);
+		fullJson.remove("device_id");
+		return fullJson.toString();
+	}
 
 	/**
 	 * Get Outgoing Call json file 
@@ -450,11 +460,8 @@ public class JsonFileReader {
 		data = FileUtil.readFromFile(new File(DATA_USAGE_JSON));
 		fullJson =  (JsonObject) JSON_PARSER.parse(data);		
 		fullJson.addProperty("timestamp", date);
-		JsonArray usages = fullJson.getAsJsonArray("usages");			
-		JsonObject usageObj = usages.get(0).getAsJsonObject();
-		usageObj.remove("usage");
-		usageObj.remove("imsi");
-		usageObj.remove("m2m_network");
+		fullJson.remove("usages");
+		fullJson.add("usages", new JsonArray());
 		return fullJson.toString();
 	}
 	
@@ -481,6 +488,20 @@ public class JsonFileReader {
 	}
 	
 	/**
+	 * Get datausage.json file with current timestamp, and without "imsi"
+	 */
+	public static String dataUsageWithoutImsiFile() {
+		long date = System.currentTimeMillis() / 1000L;
+		data = FileUtil.readFromFile(new File(DATA_USAGE_JSON));
+		fullJson =  (JsonObject) JSON_PARSER.parse(data);	
+		fullJson.addProperty("timestamp", date);
+		JsonArray usages = fullJson.getAsJsonArray("usages");
+		JsonObject usageObj = usages.get(0).getAsJsonObject();
+		usageObj.remove("imsi");
+		return fullJson.toString();
+	}
+	
+	/**
 	 * Get datausage.json file with current timestamp, without "mcc" inside "m2m_network"
 	 */
 	public static String dataUsageWithoutMccFile() {
@@ -494,5 +515,4 @@ public class JsonFileReader {
 		m2mNetwork.remove("mcc");
 		return fullJson.toString();
 	}
-
 }

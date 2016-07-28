@@ -20,13 +20,14 @@ public class OnReceiveMessage implements MessagesEventsListener {
 	 */
 	@Override
 	public void onReceived(String aMsg) {
+		System.out.println("onRecieved");
 		JsonObject response = (JsonObject) (mParser).parse(aMsg);
 		if (mJsonUtil != null) {
 			mResponse = (HashMap<String, Object>) mJsonUtil.getJsonMap(response);
-			System.out.println(mResponse);
+			System.out.println("Response:" + mResponse);
 			synchronized (mWait) {
 				System.out.println("notify");
-				mWait.notify();
+				mWait.notifyAll();
 			}
 		}
 	}
