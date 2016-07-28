@@ -8,32 +8,30 @@ import org.json.simple.JSONObject;
 
 import global.JsonUtil;
 
+/**
+ * Groups of configurations [e.g. phone include few kind of phone]
+ * @author Yehuda Ginsburg
+ *
+ */
 public class ConfigurationGroup {
 
 	private Object id, name, project_id;
 	private List<Configuration> configs;
 
 	private JSONObject jsonObject;
-
-	public static ConfigurationGroup getConfigurationGroup(String name, Project project) {
-		for (ConfigurationGroup configurationGroup : project.getConfigurationGroups())
-			if (configurationGroup.getName().equals(name))
-				return configurationGroup;
-		return null;
-	}
-
-	public static ConfigurationGroup getConfigurationGroup(long id, Project project) {
-		for (ConfigurationGroup configurationGroup : project.getConfigurationGroups())
-			if (configurationGroup.getId().equals(id))
-				return configurationGroup;
-		return null;
-	}
-
+	
 	public ConfigurationGroup(JSONObject jsonObject) {
 		this.jsonObject = jsonObject;
 		initJObj();
 	}
-
+	
+	/**
+	 * CTOR of ConfigurationGroup
+	 * @param id
+	 * @param name
+	 * @param project_id
+	 * @param configs
+	 */
 	@SuppressWarnings("unchecked")
 	public ConfigurationGroup(Long id, String name, Long project_id, List<Configuration> configs) {
 		this.id = id;
@@ -47,14 +45,36 @@ public class ConfigurationGroup {
 		this.jsonObject.put("project_id", project_id);
 		this.jsonObject.put("configs", JsonUtil.listToJsonArray(configs));
 	}
-
+	
+	/**
+	 * Extract ConfigurationGroup from Project by name
+	 * @param name
+	 * @param project
+	 * @return ConfigurationGroup
+	 */
+	public static ConfigurationGroup getConfigurationGroup(String name, Project project) {
+		for (ConfigurationGroup configurationGroup : project.getConfigurationGroups())
+			if (configurationGroup.getName().equals(name))
+				return configurationGroup;
+		return null;
+	}
+	
+	/**
+	 * Extract ConfigurationGroup from Project by id
+	 * @param name
+	 * @param project
+	 * @return ConfigurationGroup
+	 */
 	public static ConfigurationGroup getConfigurationGroup(Project project, Long configId) {
 		for (ConfigurationGroup configurationGroup : project.getConfigurationGroups())
 			if (configurationGroup.getId().equals(configId))
 				return configurationGroup;
 		return null;
 	}
-
+	
+	/**
+	 * Initialized Case from the json object 
+	 */
 	private void initJObj() {
 		this.id = jsonObject.get("id");
 		this.name = jsonObject.get("name");
@@ -64,6 +84,8 @@ public class ConfigurationGroup {
 			this.configs.add(new Configuration((JSONObject) o));
 	}
 
+	// Getters / Setters
+	
 	public Object getId() {
 		return id;
 	}

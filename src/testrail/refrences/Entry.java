@@ -1,16 +1,20 @@
 package testrail.refrences;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import global.JsonUtil;
 
+/**
+ * Manage Entry for Plan
+ * @author Yehuda Ginsburg
+ *
+ */
 public class Entry {
+	
 	private Object name, assignedto_id, id, suite_id, include_all;
 	private List<Run> runs;
 
@@ -21,6 +25,14 @@ public class Entry {
 		initMap();
 	}
 	
+	/**
+	 * CTOR 
+	 * @param suiteId
+	 * @param name
+	 * @param assignedtoId
+	 * @param includeAll
+	 * @param runs
+	 */
 	@SuppressWarnings("unchecked")
 	public Entry(Long suiteId, String name, Long assignedtoId, Boolean includeAll, List<Run> runs) {
 		this.jsonObject = new JSONObject();
@@ -40,7 +52,31 @@ public class Entry {
 		}
 		this.jsonObject = JsonUtil.mapToJsonObj(jsonObject);
 	}
-
+	
+	/**
+	 * 
+	 * @param suite_id
+	 * @param runs
+	 * @param include_all
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Entry (Long suite_id, List<Run> runs, boolean include_all) {
+		this.jsonObject = new JSONObject();		
+		jsonObject.put("suite_id", suite_id);
+		JSONArray runsRv = new JSONArray();
+		for (Run run : runs)
+			runsRv.add(run.getJsonObject());
+		jsonObject.put("runs", runsRv);
+		jsonObject.put("include_all", true);
+		
+		this.jsonObject = JsonUtil.mapToJsonObj(jsonObject);
+	}
+	
+	/**
+	 * CTOR from suite id, include all true
+	 * @param suite
+	 */
 	@SuppressWarnings("unchecked")
 	public Entry(Suite suite) {
 		this.suite_id = (Long) suite.getId();
@@ -49,7 +85,12 @@ public class Entry {
 		this.jsonObject.put("include_all", true);
 		this.jsonObject = JsonUtil.mapToJsonObj(jsonObject);
 	}
-
+	
+	/**
+	 * CTOR from suite and configGroup
+	 * @param suite
+	 * @param configurationGroup
+	 */
 	@SuppressWarnings("unchecked")
 	public Entry(Suite suite, ConfigurationGroup configurationGroup) {
 		this.suite_id = (Long) suite.getId();
@@ -63,10 +104,12 @@ public class Entry {
 		this.jsonObject.put("runs", addRunsByConfig(configurationGroup));
 		this.jsonObject = JsonUtil.mapToJsonObj(jsonObject);
 	}
+	
+	
 
 	/**
-	 * each Entry contains Runs, each Runs contains Run, each Run contains
-	 * ConfigId's array each configId contain one or more config Id's
+	 * Each Entry contains Runs, each Runs contains Run, each Run contains
+	 * ConfigId's array each configId contain one config Id
 	 * 
 	 * This method run over the ConfigurationGroups each of them contains one or
 	 * more Configuration every config should include all the other group id's
@@ -85,21 +128,20 @@ public class Entry {
 			run.put("config_ids", config_ids);
 			runs.add(run);
 		}
-		System.out.println("runs = ");
-		runs.forEach(System.out::println);
 		return runs.isEmpty() ? null : runs;
 	}
 
 	
 	/**
 	 * each Entry contains Runs, each Runs contains Run, each Run contains
-	 * ConfigId's array each configId contain one or more config Id's
+	 * ConfigId's array each configId contain 2 config Id's
 	 * 
 	 * This method run over the ConfigurationGroups each of them contains one or
 	 * more Configuration every config should include all the other group id's
 	 * beside what we already have.
 	 * 
-	 * @param configurationGroup
+	 * @param configurationGroup1
+	 * @param configurationGroup2
 	 * @return JSONArray "runs"
 	 */
 	@SuppressWarnings({ "unused", "unchecked" })
@@ -118,19 +160,6 @@ public class Entry {
 		return runs;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Entry addPlanEntry(Long suite_id, List<Run> runs, boolean include_all) {
-		Map<String, Object> entry = new HashMap<>();
-		entry.put("suite_id", suite_id);
-		JSONArray runsRv = new JSONArray();
-		for (Run run : runs)
-			runsRv.add(run.getJsonObject());
-		entry.put("runs", runsRv);
-		entry.put("include_all", true);
-		
-		return new Entry(JsonUtil.mapToJsonObj(entry));
-	}
-
 	public void initMap() {
 		this.name = jsonObject.get("name");
 		this.id = jsonObject.get("id");
@@ -144,7 +173,11 @@ public class Entry {
 			}
 		}
 	}
-
+	
+	/**
+	 * get list of run  from entry
+	 * @return List Runs
+	 */
 	public List<Run> getRuns() {
 		if (this.runs == null) {
 			this.runs = new ArrayList<>();
@@ -155,6 +188,8 @@ public class Entry {
 		}
 		return runs;
 	}
+	
+	// Getters / Setters
 
 	public void setRuns(List<Run> runs) {
 		this.runs = runs;

@@ -4,6 +4,15 @@ import org.json.simple.JSONObject;
 
 import testrail.api.TestRailUtil;
 
+/**
+ * A test case in TestRail consists of a description of the test's
+ * prerequisites, a list of test steps and the expected result. A test case can
+ * ideally be verified by a single tester in a short period of time and confirms
+ * a specific functionality, documents a task or verifies a project artifact.
+ * 
+ * @author Yehuda Ginsburg
+ *
+ */
 public class Case {
 
 	private static final String GET_CASE = "get_case/";
@@ -13,21 +22,24 @@ public class Case {
 			suite_id, template_id, title, type_id, updated_by, updated_on;
 
 	private JSONObject jsonObject;
-
-	private TestRailUtil testRailUtil = TestRailUtil.getInstance();
-
-	public Case(long id) {
-		this.jsonObject = testRailUtil.sendGetJObj(GET_CASE + id);
-		initJObj();
+	
+	/**
+	 * get case by case id
+	 * 
+	 * @param id
+	 * @return Case
+	 */
+	public static Case getCase(long id) {
+		return new Case(TestRailUtil.getInstance().sendGetJObj(GET_CASE + id));
 	}
-
+	
 	public Case(JSONObject jsonObject) {
 		this.jsonObject = jsonObject;
 		initJObj();
 	}
 
 	/**
-	 * 
+	 * Initialized Case from the json object 
 	 */
 	private void initJObj() {
 		this.created_by = jsonObject.get("created_by");
@@ -46,7 +58,9 @@ public class Case {
 		this.updated_by = jsonObject.get("updated_by");
 		this.updated_on = jsonObject.get("updated_on");
 	}
-
+	
+	// Getters / Setters
+	
 	public Object getCreated_by() {
 		return created_by;
 	}

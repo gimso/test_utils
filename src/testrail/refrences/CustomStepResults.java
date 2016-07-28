@@ -2,6 +2,11 @@ package testrail.refrences;
 
 import org.json.simple.JSONObject;
 
+/**
+ * Manage CustomStepResults
+ * @author Yehuda Ginsburg
+ *
+ */
 public class CustomStepResults {
 	private Object actual, status_id, expected, content;
 	private JSONObject jsonObject;
@@ -10,7 +15,10 @@ public class CustomStepResults {
 		this.jsonObject = jsonObject;
 		initJObj();
 	}
-
+	
+	/**
+	 * Initialized Case from the json object 
+	 */
 	private void initJObj() {
 		this.actual = jsonObject.get("actual");
 		this.status_id = jsonObject.get("status_id");
@@ -18,6 +26,8 @@ public class CustomStepResults {
 		this.content = jsonObject.get("content");
 	}
 
+	// Getters / Setters
+	
 	public Object getActual() {
 		return actual;
 	}
