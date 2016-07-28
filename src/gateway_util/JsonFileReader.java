@@ -129,6 +129,16 @@ public class JsonFileReader {
 		fullJson.addProperty("auth_request", "");
 		return fullJson.toString();
 	}
+	
+	/**
+	 * Get Authentication json file without device_id param
+	 */
+	public static String authenticationWithoutDeviceId() {
+		data = FileUtil.readFromFile(new File(AUTHENTICATION_JSON));
+		fullJson =  (JsonObject) JSON_PARSER.parse(data);
+		fullJson.remove("device_id");
+		return fullJson.toString();
+	}
 
 	/**
 	 * Get Outgoing Call json file 
@@ -505,5 +515,4 @@ public class JsonFileReader {
 		m2mNetwork.remove("mcc");
 		return fullJson.toString();
 	}
-
 }
