@@ -41,6 +41,8 @@ public class RabbitMQUtil {
 				channel.exchangeDeclare(exchangeName, EXCHANGE_TYPE, true);
 				channel.queueDeclare(queueName, false, false, false, null);
 				channel.queueBind(queueName, exchangeName, routingKey);
+				//delete all previous messages in the queue
+				channel.queuePurge(queueName);
 				
 				System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 			} catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e) {
@@ -91,6 +93,14 @@ public class RabbitMQUtil {
 			e.printStackTrace();
 		}	
 	}
+	
+	
+//	public void purgeQueue(String queue){
+//		try {
+//			channel.queuePurge(queue);
+//		} catch (IOException e) {
+//		}
+//	}
 	
 	/**
 	 * Message listener interface
