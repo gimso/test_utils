@@ -94,14 +94,6 @@ public class RabbitMQUtil {
 		}	
 	}
 	
-	
-//	public void purgeQueue(String queue){
-//		try {
-//			channel.queuePurge(queue);
-//		} catch (IOException e) {
-//		}
-//	}
-	
 	/**
 	 * Message listener interface
 	 */
