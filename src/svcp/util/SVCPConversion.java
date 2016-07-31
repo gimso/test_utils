@@ -243,6 +243,9 @@ public class SVCPConversion {
 			// Is power supply from me on/off
 			case POWER_SUPPLY_FROM_ME:
 				return PowerSupplyFromMe.getPowerSupplyMode(byteArraysToInt(value)).name();
+			// Is power supply from me on/off
+			case CLOUD_CONNECTION:
+				return PowerSupplyFromMe.getPowerSupplyMode(byteArraysToInt(value)).name();
 			default:
 				break;
 		}

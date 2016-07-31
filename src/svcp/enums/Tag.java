@@ -31,6 +31,10 @@ public enum Tag {
     IMSI(0x10),
     POWER_SUPPLY_FROM_ME (0x11),
     ALLOW_TECHNICIAN_CODE(0x12),
+	/**
+	 * Cloud connection status report of the AP.
+	 */
+	CLOUD_CONNECTION(0x13),
     // .. *Reserved for Future Use*
     FILE_PATH(0x19),
     FILE_ID(0x1A),
@@ -44,6 +48,15 @@ public enum Tag {
     BOYCOTT(0x22),
     ME_TYPE(0x23),
     VSIM_CPU_RESET(0x24),
+	/**
+	 * Switch firmware versions (0x25)</br>
+	 * 1. Description: </br>
+	 * Host requests the vSIM to switch to the previously-stored firmware image
+	 * (e.g., switch flash banks in Atmel), which should result loading the
+	 * previous version and reboot of the Atmel CPU.</br>
+	 * 2. Encoding: Empty payload</br>
+	 */
+	SWITCH_FIRMWARE_VERSIONS(0X25),
     // .. *Reserved for Future Use*
     RESULT_TAG(0x80),
     GET_ALL(0x81);
