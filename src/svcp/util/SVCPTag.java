@@ -3,6 +3,7 @@ package svcp.util;
 import global.Conversions;
 import svcp.beans.TLV;
 import svcp.enums.ApplyUpdate;
+import svcp.enums.CloudConnection;
 import svcp.enums.FileType;
 import svcp.enums.LogLevel;
 import svcp.enums.METype;
@@ -545,6 +546,33 @@ public class SVCPTag {
 		else
 			return new TLV(Tag.POWER_SUPPLY_FROM_ME);
 	}
+
+	/**
+	 * 
+	 * Cloud Connection (0x13) </br>
+	 * 1. Description: Cloud connection status report of the AP. </br>
+	 * 2. Encoding: One byte with the following encoding: </br>
+	 * Description Encoding </br>
+	 * Host is disconnected from cloud 0x00 </br>
+	 * Host is connected from cloud 0x01 </br>
+	 */
+	public static TLV cloudConnection(CloudConnection cloudConnection) {
+		if (cloudConnection == null)
+			return new TLV(Tag.CLOUD_CONNECTION);
+		else
+			return new TLV(Tag.CLOUD_CONNECTION, (byte) cloudConnection.getValue());
+	}
 	
+	/**
+	 * Switch firmware versions (0x25)</br>
+	 * 1. Description: </br>
+	 * Host requests the vSIM to switch to the previously-stored firmware image
+	 * (e.g., switch flash banks in Atmel), which should result loading the
+	 * previous version and reboot of the Atmel CPU.</br>
+	 * 2. Encoding: Empty payload</br>
+	 */
+	public static TLV switchFirmwareVersions() {	
+		return new TLV(Tag.SWITCH_FIRMWARE_VERSIONS);
+	}
 
 }

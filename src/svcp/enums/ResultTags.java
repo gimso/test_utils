@@ -36,9 +36,14 @@ public enum ResultTags {
 	COMMAND_REJECTED_DURING_FILES_APPLY(0X19),
 	CLOUD_PROTOCOL_NO_INTERNET_CONNECTION(0X1A),
 	VSIM_FIRMWARE_CORRUPTED_IMAGE(0X1B),
-	VSIM_FIRMWARE_WRITE_FAILURE(0x1C);
- 
-    private int value;
+	VSIM_FIRMWARE_WRITE_FAILURE(0x1C),
+	/**
+	 * Restarts FW Update procedure by host
+	 */
+	VSIM_FIRMWARE_INCOMPLETE_PAGE(0X1D), 
+	WRONG_CRC(0X1E);
+	
+	private int value;
 
     ResultTags(int value) {
         this.value = value;
