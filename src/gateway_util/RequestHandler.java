@@ -20,12 +20,25 @@ public class RequestHandler implements Runnable {
 	private String response4;
 	private Response obj;
 
+	/**
+	 * CTOR
+	 * @param fullJson
+	 * @param url
+	 * @param action
+	 */
 	public RequestHandler(String fullJson, String url, Action action) {
 		this.fullJson = fullJson;
 		this.url = url;
 		this.action = action;
 	}
 
+	/**
+	 * CTOR
+	 * @param fullJson
+	 * @param url
+	 * @param action
+	 * @param statusCode
+	 */
 	public RequestHandler(String fullJson, String url, Action action, int statusCode) {
 		this.fullJson = fullJson;
 		this.url = url;
@@ -33,6 +46,14 @@ public class RequestHandler implements Runnable {
 		this.statusCode = statusCode;
 	}
 
+	/**
+	 * CTOR
+	 * @param fullJson
+	 * @param url
+	 * @param action
+	 * @param statusCode
+	 * @param response1
+	 */
 	public RequestHandler(String fullJson, String url, Action action, int statusCode, String response1) {
 		this.fullJson = fullJson;
 		this.url = url;
@@ -41,6 +62,15 @@ public class RequestHandler implements Runnable {
 		this.response1 = response1;
 	}
 
+	/**
+	 * CTOR
+	 * @param fullJson
+	 * @param url
+	 * @param action
+	 * @param statusCode
+	 * @param response1
+	 * @param response2
+	 */
 	public RequestHandler(String fullJson, String url, Action action, int statusCode, String response1,
 			String response2) {
 		this.fullJson = fullJson;
@@ -51,6 +81,17 @@ public class RequestHandler implements Runnable {
 		this.response2 = response2;
 	}
 
+	/**
+	 * CTOR
+	 * @param fullJson
+	 * @param url
+	 * @param action
+	 * @param statusCode
+	 * @param response1
+	 * @param response2
+	 * @param response3
+	 * @param response4
+	 */
 	public RequestHandler(String fullJson, String url, Action action, int statusCode, String response1,
 			String response2, String response3, String response4) {
 		this.fullJson = fullJson;
@@ -65,7 +106,6 @@ public class RequestHandler implements Runnable {
 
 	/**
 	 * Sends a request
-	 * 
 	 * @param contentType
 	 * @param json
 	 * @param url
@@ -91,7 +131,6 @@ public class RequestHandler implements Runnable {
 
 	/**
 	 * Sends request and asserts that correct status code is received
-	 * 
 	 * @param contentType
 	 * @param json
 	 * @param url
@@ -120,7 +159,6 @@ public class RequestHandler implements Runnable {
 	/**
 	 * Sends request, asserts that correct status code is received, <br>
 	 * and the correct response expected in the response body
-	 * 
 	 * @param contentType
 	 * @param json
 	 * @param url
@@ -151,7 +189,6 @@ public class RequestHandler implements Runnable {
 	 * Sends request and asserts that correct status code is received, <br>
 	 * and two correct responses that are expected- are received in the response
 	 * body
-	 * 
 	 * @param contentType
 	 * @param json
 	 * @param url
@@ -182,7 +219,6 @@ public class RequestHandler implements Runnable {
 
 	/**
 	 * Sends request and assert status code and 4 responses
-	 * 
 	 * @param url
 	 * @param response
 	 */
@@ -216,7 +252,6 @@ public class RequestHandler implements Runnable {
 	/**
 	 * Sends request and asserts status code, contains response, and doesn't
 	 * contain second response.
-	 * 
 	 * @param url
 	 * @param statusCode
 	 * @param response1
@@ -247,7 +282,6 @@ public class RequestHandler implements Runnable {
 
 	/**
 	 * Sends a request and gets a JsonObject response
-	 * 
 	 * @param contentType
 	 * @param json
 	 * @param url
@@ -265,8 +299,25 @@ public class RequestHandler implements Runnable {
 			return null;
 		}
 	}
+	
+	/**
+	 * Runs a RequestHandler thread and interrupts it when it's done.
+	 * @param requestHandler
+	 */
+	public static void runRequestInThread(RequestHandler requestHandler) {
+		Thread thread = new Thread(requestHandler);
+		thread.start();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}		
+		thread.interrupt();
+	}
 
-
+	/**
+	 * Runs a thread that sends a Rest API request
+	 */
 	@Override
 	public void run() {
 		try {
@@ -276,6 +327,5 @@ public class RequestHandler implements Runnable {
 		System.out.println("sending request...");
 		sendRequest();
 		System.out.println("req sent");	
-	}
-	
+	}	
 }
