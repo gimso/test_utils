@@ -136,7 +136,6 @@ public enum MessageTypeOpcodes {
 	
 	public String getHexResponseValue() {
 		return Integer.toHexString(value | 0x80);
-//		return Integer.toHexString(value);
 	}
 
 	/**
