@@ -46,6 +46,10 @@ public class SVCPMessage {
 		this(new Header(svcp),SVCPConversion.extractSvcpAsTlvObjs(svcp));
 	}
 	
+	public SVCPMessage(String hexString) {
+		this(Conversions.hexStringToByteArray(hexString));
+	}
+
 	public Header getHeader() {
 		return header;
 	}

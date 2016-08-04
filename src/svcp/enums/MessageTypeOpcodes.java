@@ -129,6 +129,15 @@ public enum MessageTypeOpcodes {
 	public int getValue() {
 		return value;
 	}
+	
+	public String getHexValue() {
+		return Integer.toHexString(value);
+	}
+	
+	public String getHexResponseValue() {
+		return Integer.toHexString(value | 0x80);
+//		return Integer.toHexString(value);
+	}
 
 	/**
 	 * Add "0x80" to value what makes the Most Significant Bit to 1
