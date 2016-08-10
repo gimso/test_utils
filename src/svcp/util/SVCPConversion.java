@@ -29,6 +29,7 @@ import svcp.enums.*;
  */
 public class SVCPConversion {
 
+	private static final String SVCP_VERSION = "10";
 	private static final int LENGTH_INDEX = 1;
 	private static final int JUMBO = 0xff;
 	private static final int JUMBO_LENGTH_INDEX_2 = 3;
@@ -368,30 +369,43 @@ public class SVCPConversion {
 	/**
 	 * Extract the response by opcode (|&) id from logcat saved file
 	 * @param strings
-	 * @param idGroup
-	 * @param opcodeGroup
+	 * @param id
+	 * @param opcode
 	 * @return response 
 	 */
-	public static SVCPMessage getSvcpMsg(List<String> strings, String idGroup, String opcodeGroup) {
+	public static SVCPMessage getSvcpMsg(List<String> strings, String id, String opcode) {
+		// using regex can define groups (with '(' and ')' ) then they can be extracted  from text
+		// regex hex-string is \d (0-9) a-f, A-F. 
 		String defaultHexStr = "\\da-fA-f";
-		idGroup = (idGroup == null) 
-			? "([" + defaultHexStr + "]{2,2})" 
-			: "(" + idGroup + ")";
-		opcodeGroup = (opcodeGroup == null) 
-			? "([08]{1,1}[" + defaultHexStr + "]{1,1})"
-			: opcodeGroup.length() < 2 ? "(0" + opcodeGroup + ")" : "(" + opcodeGroup + ")";
-		String lengthGroup = "([\\da-fA-f]{4,4})";
-		String svcpMsgGroup = "(10" + idGroup + opcodeGroup + lengthGroup + ".*)";
 		
-		System.out.println(svcpMsgGroup);
-	
+		// find and extract id 
+		id = (id == null) 
+			// if id is null, group the id using the defaultHexStr, the id must be 2 digits
+			? "([" + defaultHexStr + "]{2,2})" 
+			// else group by id as is
+			: "(" + id + ")";
+		
+		// find and extract opcode 
+		opcode = (opcode == null) 
+			// if opcode is null, group the opcode using 0 or 8 (request/response) {1 digit} and hex string digit {1 digit}, 
+			// the opcode must be 2 digits
+			? "([08]{1,1}[" + defaultHexStr + "]{1,1})"
+			// if got the opcode as one digit add 0 before is as default, else used the opcode as is
+			: opcode.length() < 2 ? "(0" + opcode + ")" : "(" + opcode + ")";
+		
+		// find and extract length, the length must be 4 digits
+		String lengthGroup = "([\\da-fA-f]{4,4})";
+		
+		// find and extract the whole SVCP
+		String svcpMsgGroup = "("+ SVCP_VERSION + id + opcode + lengthGroup + ".*)";
+		
+		// compile the pattern
 		Pattern pattern = Pattern.compile(svcpMsgGroup, Pattern.CASE_INSENSITIVE);
 		for (String s : strings) {
+			//extract the matcher by the pattern
 			Matcher matcher = pattern.matcher(s);
 			if (matcher.find()) {
-				String group = matcher.group(1);
-				System.err.println("SVCP Extract: "+group);
-				return new SVCPMessage(group);
+				return new SVCPMessage(matcher.group(1));
 			}	
 		}
 		return null;
@@ -407,8 +421,7 @@ public class SVCPConversion {
 	 * @return SVCPMessage as response
 	 */
 	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, SVCPMessage requestObj, MessageTypeOpcodes opcode) {
-		String request = requestObj!=null?Conversions.byteArrayToHexString(requestObj.getSvcp()):null;
-		return extractResponseFromLogcatLogger(logcatLogger, request, opcode);
+		return getSvcpMsg(FileUtil.listFromFile(logcatLogger.getLogCatFile()), requestObj.getHeader().getHexId(), opcode.getHexResponseValue());
 	}
 	
 	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, MessageTypeOpcodes opcode) {
@@ -423,12 +436,8 @@ public class SVCPConversion {
 	 * @return SVCPMessage as response
 	 */
 	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, String request, MessageTypeOpcodes opcode) {
-		// extractResponseFromLogcatByOpcode
-		List<String> strings = FileUtil.listFromFile(logcatLogger.getLogCatFile());
 		String msgId = request!=null ? request.substring(2,4) : null;
-
-		String hexValue = opcode.getHexResponseValue();
-		return getSvcpMsg(strings, msgId, hexValue);
+		return getSvcpMsg(FileUtil.listFromFile(logcatLogger.getLogCatFile()), msgId, opcode.getHexResponseValue());
 	}
 	
 	/**
@@ -438,9 +447,8 @@ public class SVCPConversion {
 	 * @return SVCPMessage
 	 */
 	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, SVCPMessage requestObj) {
-		String requestHex = Conversions.byteArrayToHexString(requestObj.getSvcp());
-		String msgId = requestHex.substring(2, 4);
-		String opcode = Integer.toHexString(Integer.parseInt(requestHex.substring(4, 6), 16) | 0x80);
+		String msgId = requestObj.getHeader().getHexId();
+		String opcode = requestObj.getHeader().getEopcode().getHexValue();
 		return getSvcpMsg(FileUtil.listFromFile(logcatLogger.getLogCatFile()), msgId, opcode);
 	}
 		
@@ -481,18 +489,17 @@ public class SVCPConversion {
 	 * @return SVCPMessage
 	 */
 	public static SVCPMessage extractMsgFromPlugLoggerById(PlugLogger plugLogger, String idAsHex) {
-		String rx_ = "Rx: ";
-		String tx_ = "Tx: ";
+		
 		List<String> strings = FileUtil.listFromFile(plugLogger.getLogFile());
 
 		if (strings != null && !strings.isEmpty()) {
 			for (String line : strings) {
-				if (line.contains(rx_)) {
-					String rx = line.split(rx_)[1];/* split by spaces */
+				if (line.contains(RX)) {
+					String rx = line.split(RX)[1];/* split by spaces */
 					if (rx.substring(2, 4).equals(idAsHex))
 						return new SVCPMessage(Conversions.hexStringToByteArray(rx));
-				} else if (line.contains(tx_)) {
-					String tx = line.split(tx_)[1];
+				} else if (line.contains(TX)) {
+					String tx = line.split(TX)[1];
 					if (tx.substring(2, 4).equals(idAsHex))
 						return new SVCPMessage(Conversions.hexStringToByteArray(tx));
 				}
