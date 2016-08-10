@@ -29,6 +29,12 @@ import svcp.enums.*;
  */
 public class SVCPConversion {
 
+	private static final int LENGTH_INDEX = 1;
+	private static final int JUMBO = 0xff;
+	private static final int JUMBO_LENGTH_INDEX_2 = 3;
+	private static final int JUMBO_LENGTH_INDEX_1 = 2;
+	private static final int VALUE_BEGIN_INDEX = 2;
+	private static final int JUMBO_VALUE_BEGIN_INDEX = 4;
 	private static final String TUNNEL_INCOMING = "adb shell am broadcast -a simgo.vsim.TUNNELING -e \"tunnel_incoming\"";
 	private static final String TUNNEL_OUTGOING = "adb shell am broadcast -a simgo.vsim.TUNNELING -e \"tunnel_outgoing\"";
 	private static final String TX = "Tx: ";
@@ -56,18 +62,25 @@ public class SVCPConversion {
 		// check if index + 1 (type = length) exists in svcp
 		// Increment in the and of the loop
 		for (int i = Header.HEADER_SIZE; i + 1 < msgLength;) {
-			boolean isJumbo = svcp[i + 1] == 0xff || svcp[i + 1] < 0;
+			//check if the length of TLV is Jumbo (2 bytes length instead of one byte)
+			boolean isJumbo = svcp[i + 1] == JUMBO || svcp[i + 1] < 0;
 			
+			// JUMBO type included also the byte FF that it part of the header.
 			byte[] type = isJumbo 
 					? new byte[] { svcp[i], (byte) 0xff } 
 					: new byte[] { svcp[i] };
+			
+			//get the length
 			byte[] length = isJumbo 
-					? Conversions.bytesToByteArray(svcp[i + 2], svcp[i + 3])
-					: new byte[] { svcp[i + 1] };
+					? Conversions.bytesToByteArray(svcp[i + JUMBO_LENGTH_INDEX_1], svcp[i + JUMBO_LENGTH_INDEX_2])
+					: new byte[] { svcp[i + LENGTH_INDEX] };
+			
 			// copy value to separate byte array
 			byte[] value = new byte[byteArraysToInt(length)];
+			
 			// src = svcp
-			int srcPos = isJumbo ? i + 4 : i + 2;
+			int srcPos = isJumbo ? i + JUMBO_VALUE_BEGIN_INDEX : i + VALUE_BEGIN_INDEX;
+			
 			// dest = value ;
 			int destPos = 0;
 
@@ -77,11 +90,15 @@ public class SVCPConversion {
 				break;
 			}
 			
+			//copy the value from the whole SVCP to TLV byte array
 			System.arraycopy(svcp, srcPos, value, destPos, value.length);
+			
 			// create the tlv
 			byte[] tlv = combineByteArrays(type, length, value);
+			
 			// add tlv to the list
 			tlvsList.add(tlv);
+			
 			// moving the index to the next tlv
 			i = srcPos + value.length;
 		}
