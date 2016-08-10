@@ -740,7 +740,11 @@ public class AdbUtil {
 	*/
 	public static void rebootThenWaitForDevice() {
 		executeCommandLine("adb reboot");
-		isDeviceConnected();
+		try {
+			Runtime.getRuntime().exec(new String[] { "cmd.exe", "/c", "adb wait-for-device" }).waitFor(15,TimeUnit.SECONDS);
+		} catch (InterruptedException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
