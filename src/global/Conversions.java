@@ -226,6 +226,23 @@ public class Conversions {
 	public static byte[] hexStringToByteArray(String hexString) {
 		return new BigInteger(hexString, 16).toByteArray();
 	}
+	
+	/**
+	 * Converts hex string (decimal value) to byte array
+	 * 
+	 * @param hexString
+	 * @return byte array
+	 */
+	public static byte[] hexStringToByteArray(String hexString, int arraySize) {
+		byte[] temp = new byte[arraySize];
+		byte[] byteArray = new BigInteger(hexString, 16).toByteArray();
+		int j = temp.length - 1;
+		for (byte b : byteArray) {
+			temp[j] = b;
+			j--;
+		}
+		return temp;
+	}
 
 	/**
 	 * @return the two byte in byte array

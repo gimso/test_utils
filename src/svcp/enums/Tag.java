@@ -13,7 +13,7 @@ package svcp.enums;
  */
 public enum Tag {
 	
-    VSIM_ID(0x01),
+	ALLOWED_MODULES(0x01),
     FW_VERSION(0x02),
     HW_VERSION(0x03),
     CONFIGURATION_NAME(0x04),
