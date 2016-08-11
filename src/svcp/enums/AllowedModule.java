@@ -29,7 +29,7 @@ public enum AllowedModule {
 	LOG_LOGGER 				(new byte[]{0,0,0,0x14});
 
 	
-	private static final int ALLOW_MODULE_VALUE_SIZE = 4;
+	public static final int ALLOW_MODULE_VALUE_SIZE = 4;
 	
 	private byte[] value;
 

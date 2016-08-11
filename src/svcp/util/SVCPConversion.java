@@ -176,7 +176,6 @@ public class SVCPConversion {
 			case HW_VERSION:
 			case CONFIGURATION_NAME:
 			case LOG_LINE:
-			case VSIM_ID:
 				return stringASCIIFromByteArray(value);
 			// Binary TLV's
 			case PACKET_PAYLOAD:
@@ -259,6 +258,9 @@ public class SVCPConversion {
 			// Is power supply from me on/off
 			case CLOUD_CONNECTION:
 				return PowerSupplyFromMe.getPowerSupplyMode(byteArraysToInt(value)).name();
+			case ALLOWED_MODULES:
+				return AllowedModule.getAllowedModules(value).toString();
+			
 			default:
 				break;
 		}

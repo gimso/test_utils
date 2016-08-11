@@ -2,7 +2,7 @@ package svcp.util;
 
 import global.Conversions;
 import svcp.beans.TLV;
-import svcp.enums.AllowedModules;
+import svcp.enums.AllowedModule;
 import svcp.enums.ApplyUpdate;
 import svcp.enums.CloudConnection;
 import svcp.enums.FileType;
@@ -113,14 +113,35 @@ public class SVCPTag {
 	 * Description: defines allowed logger modules for use with "set logging"
 	 * opcode (0x02).
 	 * 
-	 * @param allowedModules
+	 * @param allowedModule
 	 * @return byte[]
 	 */
-	public static TLV allowedModules(AllowedModules allowedModules) {
-		if (allowedModules == null)
+	public static TLV allowedModule(AllowedModule allowedModule) {
+		if (allowedModule == null)
 			return new TLV(Tag.ALLOWED_MODULES);
 		else
-			return new TLV(Tag.ALLOWED_MODULES, allowedModules.getValue());
+			return new TLV(Tag.ALLOWED_MODULES, allowedModule.getValue());
+	}
+	
+	/**
+	 * Description: defines allowed logger modules for use with "set logging"
+	 * opcode (0x02).
+	 * 
+	 * @param zero or more AllowedModule objects
+	 * @return TLV include one or more AllowedModule objects
+	 */
+	public static TLV allowedModules(AllowedModule... allowedModules) {
+		if (allowedModules == null)
+			return new TLV(Tag.ALLOWED_MODULES);
+		else {
+			byte[] values = new byte[allowedModules.length * AllowedModule.ALLOW_MODULE_VALUE_SIZE];
+			int index = 0;
+			for (AllowedModule module : allowedModules) {
+				System.arraycopy(module.getValue(), 0, values, index, AllowedModule.ALLOW_MODULE_VALUE_SIZE);
+				index = index + AllowedModule.ALLOW_MODULE_VALUE_SIZE;
+			}
+			return new TLV(Tag.ALLOWED_MODULES, values);
+		}
 	}
 
 	/**
