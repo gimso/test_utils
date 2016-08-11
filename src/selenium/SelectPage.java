@@ -1,7 +1,9 @@
-package global;
+package selenium;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import global.PropertiesUtil;
 
 /**
  * Select by Clicking pages in the persist cloud

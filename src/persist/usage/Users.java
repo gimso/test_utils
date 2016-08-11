@@ -6,9 +6,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import global.PersistException;
-import global.PersistUtil;
-import global.SelectPage;
 import global.TimeAndDateConvertor;
+import selenium.PersistUtil;
+import selenium.SelectPage;
 /**
  * This class is Added Modified and Delete User under persist.usage.User page
  * @author Yehuda Ginsburg
@@ -132,7 +132,7 @@ public class Users {
 		// registrationDate
 		if (registrationDate != null) {
 			driver.findElement(By.id(ID_REGISTRATION_DATE)).clear();
-			driver.findElement(By.id(ID_REGISTRATION_DATE)).sendKeys(TimeAndDateConvertor.dateToString(registrationDate));
+			driver.findElement(By.id(ID_REGISTRATION_DATE)).sendKeys(TimeAndDateConvertor.convertDateToString(registrationDate));
 		}
 		
 		// save
@@ -251,7 +251,7 @@ public class Users {
 		if (registrationDate != null) {
 			// registrationDate
 			driver.findElement(By.id(ID_REGISTRATION_DATE)).clear();
-			driver.findElement(By.id(ID_REGISTRATION_DATE)).sendKeys(TimeAndDateConvertor.dateToString(registrationDate));
+			driver.findElement(By.id(ID_REGISTRATION_DATE)).sendKeys(TimeAndDateConvertor.convertDateToString(registrationDate));
 		}
 		
 		// save

@@ -7,8 +7,8 @@ import java.util.Locale;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import global.PersistUtil;
-import global.SelectPage;
+import selenium.PersistUtil;
+import selenium.SelectPage;
 
 /**
  * 

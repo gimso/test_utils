@@ -3,8 +3,8 @@ package persist.auth;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import global.PersistUtil;
-import global.SelectPage;
+import selenium.PersistUtil;
+import selenium.SelectPage;
 
 public class Users {
 	private static final String LINK_TEXT_ADD_PLUG_TYPE = "Add plug type";

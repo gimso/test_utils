@@ -1,4 +1,4 @@
-package sim_management.util;
+package selenium;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,8 +9,13 @@ import global.PropertiesUtil;
  */
 public class SimPageSelect {
 	private static final String HOMEPAGE_URL = PropertiesUtil.getInstance().getProperty("SIMGO_VSIM_GUI");
+	private static final String ALLOCATIONS_URL = HOMEPAGE_URL + "Allocations/";
+	private static final String DJCELERY_URL = HOMEPAGE_URL + "djcelery/";
+	private static final String MOBILE_OPERATORS_URL = HOMEPAGE_URL + "MobileOperators/";
+	private static final String SIM_BANK_URL = HOMEPAGE_URL + "SimBank/";
+	private static final String SIM_CONTRACTS_URL = HOMEPAGE_URL + "SimContracts/";
+	private static final String USAGE_COUNTERS_URL = HOMEPAGE_URL + "Counters/";
 	private WebDriver webDriver;
-	
 	
 	public SimPageSelect(WebDriver webDriver) {
 		this.webDriver = webDriver;
@@ -20,7 +25,7 @@ public class SimPageSelect {
 	 *  Select Contract Priorities
 	 */
 	public void selectContractPriorities() {
-		webDriver.get(HOMEPAGE_URL + "Allocations/mccpriority/");
+		webDriver.get(ALLOCATIONS_URL);
 		webDriver.findElement(By.linkText("Contract Priorities")).click();
 	}
 	
@@ -28,7 +33,7 @@ public class SimPageSelect {
 	 *  Select Device states
 	 */
 	public void selectDeviceStates() {
-		webDriver.get(HOMEPAGE_URL + "Allocations/devicestate/");
+		webDriver.get(ALLOCATIONS_URL);
 		webDriver.findElement(By.linkText("Device states")).click();
 	}
 	
@@ -36,7 +41,7 @@ public class SimPageSelect {
 	 *  Select Forced sims
 	 */
 	public void selectForcedSims() {
-		webDriver.get(HOMEPAGE_URL + "Allocations/forcedsim/");
+		webDriver.get(ALLOCATIONS_URL);
 		webDriver.findElement(By.linkText("Forced sims")).click();
 	}
 	
@@ -44,7 +49,7 @@ public class SimPageSelect {
 	 *  Select Policies
 	 */
 	public void selectPolicies() {
-		webDriver.get(HOMEPAGE_URL + "Allocations/policy/");
+		webDriver.get(ALLOCATIONS_URL);
 		webDriver.findElement(By.linkText("Policies")).click();
 	}
 	
@@ -52,7 +57,7 @@ public class SimPageSelect {
 	 *  Select Crontabs
 	 */
 	public void selectCrontabs() {
-		webDriver.get(HOMEPAGE_URL + "djcelery/crontabschedule/");
+		webDriver.get(DJCELERY_URL);
 		webDriver.findElement(By.linkText("Crontabs")).click();
 	}
 	
@@ -60,7 +65,7 @@ public class SimPageSelect {
 	 *  Select Intervals
 	 */
 	public void selectIntervals() {
-		webDriver.get(HOMEPAGE_URL + "djcelery/intervalschedule/");
+		webDriver.get(DJCELERY_URL);
 		webDriver.findElement(By.linkText("Intervals")).click();
 	}
 	
@@ -68,7 +73,7 @@ public class SimPageSelect {
 	 *  Select Periodic tasks
 	 */
 	public void selectPeriodicTasks() {
-		webDriver.get(HOMEPAGE_URL + "djcelery/periodictask/");
+		webDriver.get(DJCELERY_URL);
 		webDriver.findElement(By.linkText("Periodic tasks")).click();
 	}
 	
@@ -76,7 +81,7 @@ public class SimPageSelect {
 	 *  Select Mobile networks
 	 */
 	public void selectMobileNetworks() {
-		webDriver.get(HOMEPAGE_URL + "MobileOperators/mobilenetwork/");
+		webDriver.get(MOBILE_OPERATORS_URL);
 		webDriver.findElement(By.linkText("Mobile networks")).click();
 	}
 	
@@ -84,7 +89,7 @@ public class SimPageSelect {
 	 *  Select Network operators
 	 */
 	public void selectNetworkOperators() {
-		webDriver.get(HOMEPAGE_URL + "MobileOperators/networkoperator/");
+		webDriver.get(MOBILE_OPERATORS_URL);
 		webDriver.findElement(By.linkText("Network operators")).click();
 	}
 	
@@ -92,7 +97,7 @@ public class SimPageSelect {
 	 *  Select Sim profiles
 	 */
 	public void selectSimProfiles() {
-		webDriver.get(HOMEPAGE_URL + "SimBank/simprofile/");
+		webDriver.get(SIM_BANK_URL);
 		webDriver.findElement(By.linkText("Sim profiles")).click();
 	}
 	
@@ -100,7 +105,7 @@ public class SimPageSelect {
 	 *  Select Sim units
 	 */
 	public void selectSimUnits() {
-		webDriver.get(HOMEPAGE_URL + "SimBank/simunit/");
+		webDriver.get(SIM_BANK_URL);
 		webDriver.findElement(By.linkText("Sim units")).click();
 	}
 	
@@ -108,7 +113,7 @@ public class SimPageSelect {
 	 *  Select Apns
 	 */
 	public void selectApns() {
-		webDriver.get(HOMEPAGE_URL + "SimContracts/apn/");
+		webDriver.get(SIM_CONTRACTS_URL);
 		webDriver.findElement(By.linkText("Apns")).click();
 	}
 	
@@ -116,7 +121,7 @@ public class SimPageSelect {
 	 *  Select Contracts
 	 */
 	public void selectContracts() {
-		webDriver.get(HOMEPAGE_URL + "SimContracts/contract/");
+		webDriver.get(SIM_CONTRACTS_URL);
 		webDriver.findElement(By.linkText("Contracts")).click();
 	}
 	
@@ -124,7 +129,7 @@ public class SimPageSelect {
 	 *  Select Limits
 	 */
 	public void selectLimits() {
-		webDriver.get(HOMEPAGE_URL + "SimContracts/limit/");
+		webDriver.get(SIM_CONTRACTS_URL);
 		webDriver.findElement(By.linkText("Limits")).click();
 	}
 	
@@ -132,7 +137,7 @@ public class SimPageSelect {
 	 *  Select Suppliers
 	 */
 	public void selectSuppliers() {
-		webDriver.get(HOMEPAGE_URL + "SimContracts/supplier/");
+		webDriver.get(SIM_CONTRACTS_URL);
 		webDriver.findElement(By.linkText("Suppliers")).click();
 	}
 	
@@ -140,7 +145,7 @@ public class SimPageSelect {
 	 *  Select Sim counters
 	 */
 	public void selectSimCounters() {
-		webDriver.get(HOMEPAGE_URL + "Counters/simcounter/");
+		webDriver.get(USAGE_COUNTERS_URL);
 		webDriver.findElement(By.linkText("Sim counters")).click();
 	}
 }

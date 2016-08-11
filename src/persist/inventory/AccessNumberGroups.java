@@ -1,7 +1,7 @@
 package persist.inventory;
 
-import global.PersistUtil;
-import global.SelectPage;
+import selenium.PersistUtil;
+import selenium.SelectPage;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

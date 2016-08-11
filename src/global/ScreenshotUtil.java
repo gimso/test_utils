@@ -11,9 +11,8 @@ import org.openqa.selenium.TakesScreenshot;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.Reporter;
-
 import testrail.api.TestRailAPI;
-
+import selenium.PersistUtil;
 public class ScreenshotUtil {
 	
 	/**
