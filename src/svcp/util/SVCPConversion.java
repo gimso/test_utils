@@ -196,7 +196,6 @@ public class SVCPConversion {
 			case GET_ALL:
 				return byteArrayToHexString(value);
 			// default path / id on the vfs
-			case FILE_PATH:
 				if(value.equals(SetFiles.USIM_3G_PATH))
 					return SetFiles.USIM_3G_PATH.name();
 				else if(value.equals(SetFiles.SIM_2G_PATH))
@@ -280,8 +279,8 @@ public class SVCPConversion {
 		if (input == null)
 			throw new IllegalArgumentException();
 
-		int length = Header.HEADER_SIZE;
-		if (length > input.length)
+			case ALLOWED_MODULES:
+				return AllowedModules.getAllowedModules(value).name();
 			throw new IllegalArgumentException();
 
 		int crc = 0;
