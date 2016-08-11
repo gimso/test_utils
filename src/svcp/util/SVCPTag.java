@@ -108,20 +108,6 @@ public class SVCPTag {
 		byte value = (byte) resultTag.getValue();
 		return new TLV(Tag.RESULT_TAG, value);
 	}
-
-	/**
-	 * Description: defines allowed logger modules for use with "set logging"
-	 * opcode (0x02).
-	 * 
-	 * @param allowedModule
-	 * @return byte[]
-	 */
-	public static TLV allowedModule(AllowedModule allowedModule) {
-		if (allowedModule == null)
-			return new TLV(Tag.ALLOWED_MODULES);
-		else
-			return new TLV(Tag.ALLOWED_MODULES, allowedModule.getValue());
-	}
 	
 	/**
 	 * Description: defines allowed logger modules for use with "set logging"
