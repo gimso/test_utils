@@ -1,5 +1,7 @@
 package testrail.listener;
 
+import java.util.Arrays;
+
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -87,11 +89,13 @@ public class Listener implements ITestListener {
 	public Test getTest(String methodName) {
 		methodName = methodName.toLowerCase().replaceAll("\\s", "");
 		for (testrail.refrences.Test tempTest : TestRailUtil.getInstance().getPlan().getTests()) {
-			String title = String.valueOf(tempTest.getTitle()).toLowerCase().replaceAll("\\s", "");
 			String custom_method_name = String.valueOf(tempTest.getCustom_method_name()).toLowerCase();
-			boolean equalsTitle = title.equals(methodName);
 			boolean equalsCustomMethod = custom_method_name != null && custom_method_name.equals(methodName);
-			if (equalsTitle || equalsCustomMethod) {
+			if (equalsCustomMethod) {
+				return tempTest;
+			}
+			String title = String.valueOf(tempTest.getTitle()).toLowerCase().replaceAll("\\s", "");
+			if (title.equals(methodName)) {
 				return tempTest;
 			}
 		}
@@ -105,12 +109,19 @@ public class Listener implements ITestListener {
 	 */
 	public String getOutput(ITestResult iTestResult) {
 		Object instance = iTestResult.getInstance();
+		String rv = "";
+		String message = "";
+
 		try {
-			return (String) instance.getClass().getDeclaredField("output").get(instance);
-		} catch (Exception e) {
-			System.err.println("Cannot get output from Class " + instance.getClass().getName());
-			return null;
-		}
+			rv = (String) instance.getClass().getDeclaredField("output").get(instance);
+		} catch (Exception e) {}
+
+		Throwable throwable = iTestResult.getThrowable();
+		message = throwable == null ? "" : throwable.getMessage() + "\n" + Arrays.asList(throwable.getStackTrace());
+		
+		// if there is a failure use the error message
+		rv = message + "\n" + rv;
+		return rv;
 	}
 
 	/**

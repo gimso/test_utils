@@ -1,14 +1,12 @@
 package svcp.util;
 
-import static global.Conversions.byteArrayToHexString;
-import static global.Conversions.byteArraysToInt;
-import static global.Conversions.combineByteArrays;
-import static global.Conversions.hexStringToByteArray;
-import static global.Conversions.intToByte;
-import static global.Conversions.stringASCIIFromByteArray;
+import static global.Conversions.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -20,22 +18,8 @@ import global.FileUtil;
 import global.PropertiesUtil;
 import logging.LogcatLogger;
 import logging.PlugLogger;
-import svcp.beans.Header;
-import svcp.beans.SVCPMessage;
-import svcp.beans.TLV;
-import svcp.enums.ApplyUpdate;
-import svcp.enums.FileType;
-import svcp.enums.LogLevel;
-import svcp.enums.METype;
-import svcp.enums.MessageTypeOpcodes;
-import svcp.enums.Mode;
-import svcp.enums.PowerSupplyFromMe;
-import svcp.enums.ResultTags;
-import svcp.enums.SetFiles;
-import svcp.enums.SimGeneration;
-import svcp.enums.Tag;
-import svcp.enums.UICCRelay;
-import svcp.enums.VsimType;
+import svcp.beans.*;
+import svcp.enums.*;
 
 /**
  * Utility for converting
@@ -45,8 +29,17 @@ import svcp.enums.VsimType;
  */
 public class SVCPConversion {
 
-	private static final String SENT_MESSAGE = "Sent data: ";
-	private static final String RECEIVED_MESSAGE = "Received message: ";
+	private static final String SVCP_VERSION = "10";
+	private static final int LENGTH_INDEX = 1;
+	private static final int JUMBO = 0xff;
+	private static final int JUMBO_LENGTH_INDEX_2 = 3;
+	private static final int JUMBO_LENGTH_INDEX_1 = 2;
+	private static final int VALUE_BEGIN_INDEX = 2;
+	private static final int JUMBO_VALUE_BEGIN_INDEX = 4;
+	private static final String TUNNEL_INCOMING = "adb shell am broadcast -a simgo.vsim.TUNNELING -e \"tunnel_incoming\"";
+	private static final String TUNNEL_OUTGOING = "adb shell am broadcast -a simgo.vsim.TUNNELING -e \"tunnel_outgoing\"";
+	private static final String TX = "Tx: ";
+	private static final String RX = "Rx: ";
 	private static final int MAX_HEADER_LENGTH = Integer.decode(PropertiesUtil.getInstance().getProperty("MAX_HEADER_LENGTH"));
 
 	/**
@@ -58,34 +51,55 @@ public class SVCPConversion {
 	 */
 	public static List<byte[]> extractTlvsFromSvcp(byte[] svcp) {
 		List<byte[]> tlvsList = new ArrayList<>();
-
+		
 		if (svcp.length <= Header.HEADER_SIZE)
 			System.err.println("svcp byte array is to small - and not includes tlv's");
+		
+		//Extract msg length (eliminate the need to take care of array index out of bounds exceptions...)
+		byte[] lengthBA = Arrays.copyOfRange(svcp, 3, 5);
+		int msgLength = Conversions.hexStringToDecimalInt(Conversions.byteArrayToHexString(lengthBA)) +  Header.HEADER_SIZE;
 
 		// Start from the first point after Header-size (6)
 		// check if index + 1 (type = length) exists in svcp
 		// Increment in the and of the loop
-		for (int i = Header.HEADER_SIZE; i + 1 < svcp.length;) {
-			boolean isJumbo = svcp[i + 1] == 0xff || svcp[i + 1] < 0;
+		for (int i = Header.HEADER_SIZE; i + 1 < msgLength;) {
+			//check if the length of TLV is Jumbo (2 bytes length instead of one byte)
+			boolean isJumbo = svcp[i + 1] == JUMBO || svcp[i + 1] < 0;
 			
+			// JUMBO type included also the byte FF that it part of the header.
 			byte[] type = isJumbo 
 					? new byte[] { svcp[i], (byte) 0xff } 
 					: new byte[] { svcp[i] };
+			
+			//get the length
 			byte[] length = isJumbo 
-					? Conversions.bytesToByteArray(svcp[i + 2], svcp[i + 3])
-					: new byte[] { svcp[i + 1] };
+					? Conversions.bytesToByteArray(svcp[i + JUMBO_LENGTH_INDEX_1], svcp[i + JUMBO_LENGTH_INDEX_2])
+					: new byte[] { svcp[i + LENGTH_INDEX] };
+			
 			// copy value to separate byte array
 			byte[] value = new byte[byteArraysToInt(length)];
+			
 			// src = svcp
-			int srcPos = isJumbo ? i + 4 : i + 2;
+			int srcPos = isJumbo ? i + JUMBO_VALUE_BEGIN_INDEX : i + VALUE_BEGIN_INDEX;
+			
 			// dest = value ;
 			int destPos = 0;
-			// length of the value byte array = length;
+
+			// if the remaining of the svcp (from srcPos until value length) is not big enough error will print
+			if(svcp.length - srcPos < value.length) {
+				System.err.println("The value length (" + value.length + ") is bigger then the svcp length (" + (svcp.length - srcPos) + ")");
+				break;
+			}
+			
+			//copy the value from the whole SVCP to TLV byte array
 			System.arraycopy(svcp, srcPos, value, destPos, value.length);
+			
 			// create the tlv
 			byte[] tlv = combineByteArrays(type, length, value);
+			
 			// add tlv to the list
 			tlvsList.add(tlv);
+			
 			// moving the index to the next tlv
 			i = srcPos + value.length;
 		}
@@ -320,15 +334,8 @@ public class SVCPConversion {
 	 */
 	public static void sendSVCPOutgoingRequest(String request) {
 		// convert the byte array to hex string
-		String cmd = "adb shell am broadcast -a simgo.vsim.TUNNELING -e \"tunnel_outgoing\" \"" + request + "\"";
-		System.out.println("Request command: " + cmd);
-		try {
-			AdbUtil.executeCommandLine(cmd).waitFor();
-			// need to wait one second, in order to received something on the
-			// log Thread
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-		}
+		String cmd = TUNNEL_OUTGOING + " \"" + request + "\"";
+		sendTunnelMsg(cmd);
 	}
 	
 	/**
@@ -338,8 +345,17 @@ public class SVCPConversion {
 	public static void sendSVCPIncomingRequest(byte[] request) {
 		// convert the byte array to hex string
 		String reqStr = byteArrayToHexString(request);
-		String cmd = "adb shell am broadcast -a simgo.vsim.TUNNELING -e \"tunnel_incoming\" \""+reqStr+"\"";
+		String cmd = TUNNEL_INCOMING + " \"" + reqStr + "\"";
+		sendTunnelMsg(cmd);
+		
+	}
+
+	/**
+	 * @param cmd command
+	 */
+	public static void sendTunnelMsg(String cmd) {
 		System.out.println("Request command: " + cmd);
+
 		try {
 			AdbUtil.executeCommandLine(cmd).waitFor();
 			// need to wait one second, in order to received something on the
@@ -347,27 +363,51 @@ public class SVCPConversion {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 		}
-		
 	}
 
+
 	/**
-	 * Extract the first response from logcat saved file
-	 * 
-	 * @param logcatLogger
-	 *            object instance
-	 * @return response byte array
+	 * Extract the response by opcode (|&) id from logcat saved file
+	 * @param strings
+	 * @param id
+	 * @param opcode
+	 * @return response 
 	 */
-	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger) {
-		// extractFirstResponseFromLogcatLogger
-		List<String> strings = FileUtil.listFromFile(logcatLogger.getLogCatFile());
-		if (strings != null && !strings.isEmpty())
-			for (String line : strings)
-				if (line.contains(RECEIVED_MESSAGE)) {
-					String[] tempMessageLine = line.split(RECEIVED_MESSAGE);
-					if (tempMessageLine.length > 1)
-						return new SVCPMessage(Conversions.hexStringToByteArray(tempMessageLine[1]));
-				}
-		System.err.println("Cannot find any response in " + logcatLogger.getLogCatFile().getAbsoluteFile());
+	public static SVCPMessage getSvcpMsg(List<String> strings, String id, String opcode) {
+		// using regex can define groups (with '(' and ')' ) then they can be extracted  from text
+		// regex hex-string is \d (0-9) a-f, A-F. 
+		String defaultHexStr = "\\da-fA-f";
+		
+		// find and extract id 
+		id = (id == null) 
+			// if id is null, group the id using the defaultHexStr, the id must be 2 digits
+			? "([" + defaultHexStr + "]{2,2})" 
+			// else group by id as is
+			: "(" + id + ")";
+		
+		// find and extract opcode 
+		opcode = (opcode == null) 
+			// if opcode is null, group the opcode using 0 or 8 (request/response) {1 digit} and hex string digit {1 digit}, 
+			// the opcode must be 2 digits
+			? "([08]{1,1}[" + defaultHexStr + "]{1,1})"
+			// if got the opcode as one digit add 0 before is as default, else used the opcode as is
+			: opcode.length() < 2 ? "(0" + opcode + ")" : "(" + opcode + ")";
+		
+		// find and extract length, the length must be 4 digits
+		String lengthGroup = "([\\da-fA-f]{4,4})";
+		
+		// find and extract the whole SVCP
+		String svcpMsgGroup = "("+ SVCP_VERSION + id + opcode + lengthGroup + ".*)";
+		
+		// compile the pattern
+		Pattern pattern = Pattern.compile(svcpMsgGroup, Pattern.CASE_INSENSITIVE);
+		for (String s : strings) {
+			//extract the matcher by the pattern
+			Matcher matcher = pattern.matcher(s);
+			if (matcher.find()) {
+				return new SVCPMessage(matcher.group(1));
+			}	
+		}
 		return null;
 	}
 
@@ -380,43 +420,24 @@ public class SVCPConversion {
 	 * @param SVCPMessage
 	 * @return SVCPMessage as response
 	 */
-	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, SVCPMessage requestObj, MessageTypeOpcodes opcode) {//extractResponseFromLogcatLoggerByRequest
-		String request = Conversions.byteArrayToHexString(requestObj.getSvcp());
-		return extractResponseFromLogcatLogger(logcatLogger, request, opcode);
+	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, SVCPMessage requestObj, MessageTypeOpcodes opcode) {
+		return getSvcpMsg(FileUtil.listFromFile(logcatLogger.getLogCatFile()), requestObj.getHeader().getHexId(), opcode.getHexResponseValue());
+	}
+	
+	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, MessageTypeOpcodes opcode) {
+		return getSvcpMsg(FileUtil.listFromFile(logcatLogger.getLogCatFile()), null, opcode.getHexResponseValue());
 	}
 	
 	/**
 	 * Extract response from logcat by Opcode
 	 * @param logcatLogger
 	 * @param request
-	 * @param opcode
+	 * @param opcode 
 	 * @return SVCPMessage as response
 	 */
-	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, String request,
-			MessageTypeOpcodes opcode) {
-		// extractResponseFromLogcatByOpcode
-		List<String> strings = FileUtil.listFromFile(logcatLogger.getLogCatFile());
-		boolean checkRx = false;
-		
-		if (strings != null && !strings.isEmpty()) {
-			for (String line : strings) {
-				if (!checkRx && line.contains(SENT_MESSAGE)) {
-					checkRx = isLineContainsRequest(request, line);
-				} else if (checkRx && line.contains(RECEIVED_MESSAGE)) {
-					String[] tempMessageLine = line.split(RECEIVED_MESSAGE);
-					if (tempMessageLine.length > 1) {
-						String hexString = tempMessageLine[1];
-						byte[] hexStringToByteArray = Conversions.hexStringToByteArray(hexString);
-						SVCPMessage temp = new SVCPMessage(hexStringToByteArray);
-						if (temp.getHeader().getEopcode().equals(opcode))
-							return temp;
-					}
-				}
-			}
-		}
-		System.err.println("Cannot find any response in " + logcatLogger.getLogCatFile().getAbsoluteFile());
-		return null;
-
+	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, String request, MessageTypeOpcodes opcode) {
+		String msgId = request!=null ? request.substring(2,4) : null;
+		return getSvcpMsg(FileUtil.listFromFile(logcatLogger.getLogCatFile()), msgId, opcode.getHexResponseValue());
 	}
 	
 	/**
@@ -426,50 +447,11 @@ public class SVCPConversion {
 	 * @return SVCPMessage
 	 */
 	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, SVCPMessage requestObj) {
-		//	Get logcat logger output file as list of string
-		List<String> strings = FileUtil.listFromFile(logcatLogger.getLogCatFile());
-				
-		String requestHex = Conversions.byteArrayToHexString(requestObj.getSvcp());
-		String svcpVersion = requestHex.substring(0, 2);
-		String msgId = requestHex.substring(2,4);
-		
-		Integer opcode = Integer.parseInt(requestHex.substring(4, 6), 16) | 0x80;
-		String hexString = Integer.toHexString(opcode);
-		String returnHex = hexString.length() == 2 ? hexString : "0" + hexString;
-		String headerIdAndOpcode = svcpVersion + msgId + returnHex;
-
-		boolean checkRx = false;		
-		
-		if (strings != null && !strings.isEmpty()) {
-			for (String line : strings) {
-				if (!checkRx && line.contains(SENT_MESSAGE))
-					checkRx = isLineContainsRequest(requestHex, line);
-				else if (checkRx && line.toLowerCase().contains(headerIdAndOpcode.toLowerCase())) {
-					return getSvcpById(RECEIVED_MESSAGE, msgId, line);
-				}
-			}
-		}
-		System.err.println("Cannot find response with " + headerIdAndOpcode);
-		return null;
-	}	
-	
-	/**
-	 * Extract the responses from logcat log file
-	 * 
-	 * @return a list of svcp byte array
-	 */
-	public static List<SVCPMessage> extractResponseFromLogcatLoggerReturnList(LogcatLogger logcatLogger) {
-		List<SVCPMessage> responses = new ArrayList<>();
-		List<String> strings = FileUtil.listFromFile(logcatLogger.getLogCatFile());
-		
-		if (!strings.isEmpty())
-			for (String line : strings)
-				if (line.contains(RECEIVED_MESSAGE))
-					if (line.split(RECEIVED_MESSAGE).length > 1)
-						responses.add(new SVCPMessage(hexStringToByteArray(line.split(RECEIVED_MESSAGE)[1])));
-		return responses;
+		String msgId = requestObj.getHeader().getHexId();
+		String opcode = requestObj.getHeader().getEopcode().getHexValue();
+		return getSvcpMsg(FileUtil.listFromFile(logcatLogger.getLogCatFile()), msgId, opcode);
 	}
-	
+		
 	/**
 	 * Compare the id from tx and tx and return the tx (response from Atmel) as SVCPMessage
 	 * @param plugLogger
@@ -478,20 +460,17 @@ public class SVCPConversion {
 	 */
 	public static SVCPMessage extractResponseFromPlugLogger(PlugLogger plugLogger, String idAsHex) {
 		
-		String rx_ = "Rx: ";
-		String tx_ = "Tx: ";
-		
 		List<String> strings = FileUtil.listFromFile(plugLogger.getLogFile());
 		boolean checkRx = false;
 		
 		if (strings != null && !strings.isEmpty()) {
 			for (String line : strings) {
-				if (!checkRx && line.contains(rx_)) {
-					String rx = line.split(rx_)[1];/* split by spaces */
+				if (!checkRx && line.contains(RX)) {
+					String rx = line.split(RX)[1];/* split by spaces */
 					if (rx.substring(2, 4).equals(idAsHex))
 						checkRx = true;
-				} else if (checkRx && line.contains(tx_)) {
-					String tx = line.split(tx_)[1];
+				} else if (checkRx && line.contains(TX)) {
+					String tx = line.split(TX)[1];
 					if (tx.substring(2, 4).equals(idAsHex)) 
 						return new SVCPMessage(Conversions.hexStringToByteArray(tx));
 					
@@ -510,18 +489,17 @@ public class SVCPConversion {
 	 * @return SVCPMessage
 	 */
 	public static SVCPMessage extractMsgFromPlugLoggerById(PlugLogger plugLogger, String idAsHex) {
-		String rx_ = "Rx: ";
-		String tx_ = "Tx: ";
+		
 		List<String> strings = FileUtil.listFromFile(plugLogger.getLogFile());
 
 		if (strings != null && !strings.isEmpty()) {
 			for (String line : strings) {
-				if (line.contains(rx_)) {
-					String rx = line.split(rx_)[1];/* split by spaces */
+				if (line.contains(RX)) {
+					String rx = line.split(RX)[1];/* split by spaces */
 					if (rx.substring(2, 4).equals(idAsHex))
 						return new SVCPMessage(Conversions.hexStringToByteArray(rx));
-				} else if (line.contains(tx_)) {
-					String tx = line.split(tx_)[1];
+				} else if (line.contains(TX)) {
+					String tx = line.split(TX)[1];
 					if (tx.substring(2, 4).equals(idAsHex))
 						return new SVCPMessage(Conversions.hexStringToByteArray(tx));
 				}
@@ -539,22 +517,22 @@ public class SVCPConversion {
 	 */
 	public static SVCPMessage extractMsgFromPlugLoggerByOpcode(PlugLogger plugLogger, MessageTypeOpcodes opcode) {
 		String opcodeAsHex = Conversions.byteArrayToHexString(Conversions.intToBytes(opcode.getValue()));
-		String rx_ = "Rx: ";
-		String tx_ = "Tx: ";
+		
 		List<String> strings = FileUtil.listFromFile(plugLogger.getLogFile());
 
-		if (strings != null && !strings.isEmpty())
-			for (String line : strings)
-				if (line.contains(rx_)) {
-					String rx = line.split(rx_)[1];/* split by spaces */
+		if (strings != null && !strings.isEmpty()) {
+			for (String line : strings) {
+				if (line.contains(RX)) {
+					String rx = line.split(RX)[1];/* split by spaces */
 					if (rx.substring(4, 6).equals(opcodeAsHex))
 						return new SVCPMessage(Conversions.hexStringToByteArray(rx));
-				} else if (line.contains(tx_)) {
-					String tx = line.split(tx_)[1];
+				} else if (line.contains(TX)) {
+					String tx = line.split(TX)[1];
 					if (tx.substring(4, 6).equals(opcodeAsHex))
 						return new SVCPMessage(Conversions.hexStringToByteArray(tx));
 				}
-
+			}
+		}
 		System.err.println("Cannot find response with opcode " + opcode);
 		return null;
 	}
@@ -658,53 +636,5 @@ public class SVCPConversion {
 		System.out.println("Request command: " + cmd);
 		AdbUtil.executeCommandLine(cmd);
 	}
-	
-	/**
-	 * Check if line contains the Request
-	 * @param request
-	 * @param checkRx
-	 * @param line
-	 * @return boolean
-	 */
-	private static boolean isLineContainsRequest(String request, String line) {
-		String sent = line.split(SENT_MESSAGE)[1];/* split by spaces */
-		if (sent.toLowerCase().contains(request.toLowerCase()))
-			return true;
-		return false;
-	}
 
-	/**
-	 * Get response msg by ID
-	 * 
-	 * @param receivedMessage
-	 * @param msgId
-	 * @param line
-	 * @return SVCPMessage
-	 */
-	private static SVCPMessage getSvcpById(String receivedMessage, String msgId, String line) {
-		byte[] hexStringToByteArray = Conversions.hexStringToByteArray(line.split(receivedMessage)[1]);
-		
-		Header tempHeader = new Header(hexStringToByteArray);
-		int firstLength = Header.HEADER_SIZE + tempHeader.getLength();
-		int length = hexStringToByteArray.length - firstLength;
-		
-		byte[] tempFirst = new byte[firstLength];
-		System.arraycopy(hexStringToByteArray, 0, tempFirst, 0, firstLength);
-		
-		SVCPMessage tempA = new SVCPMessage(tempFirst);
-		boolean byteArrayContainsTwoMsgs = firstLength < hexStringToByteArray.length;
-
-		if (byteArrayContainsTwoMsgs) {
-			byte[] tempSec = new byte[length];
-			System.arraycopy(hexStringToByteArray, firstLength, tempSec, 0, length);
-
-			SVCPMessage tempB = new SVCPMessage(tempSec);
-
-			if (tempA.getHeader().getHexId().equalsIgnoreCase(msgId))
-				return tempA;
-			else
-				return tempB;
-		} else
-			return tempA;
-	}
 }

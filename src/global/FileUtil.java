@@ -10,10 +10,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 
 import beans.FilePacket;
+import svcp.beans.SVCPMessage;
 
 /**
  * Utility to get info from Files
@@ -175,13 +178,15 @@ public class FileUtil {
 	 */
 	public static boolean isStringExistInFile(File file, String string) {
 		List<String> listFromFile = listFromFile(file);
-		for (String line : listFromFile) {
-			if (line.toLowerCase().contains(string.toLowerCase())) {
-				System.out.println("String " + string + " Found in Line: \n" + line);
-				return true;
+		Pattern pattern = Pattern.compile("(" + string + ")" , Pattern.CASE_INSENSITIVE);
+		for (String s : listFromFile) {
+			Matcher matcher = pattern.matcher(s);
+			if (matcher.find()) {
+				System.out.println("String found " + s);
+				return true;	
 			}
 		}
-		System.err.println(string + " was not found in\n" + file.getAbsolutePath());
+		System.err.println("String "+string + " was not found in\n" + file.getAbsolutePath());
 		return false;
 	}
 }
