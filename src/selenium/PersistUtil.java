@@ -3,7 +3,7 @@ package selenium;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -45,9 +45,8 @@ public class PersistUtil implements DriverUtil{
 	 */
 	private PersistUtil() {
 
-		// Fire up Crome browser
-		System.setProperty("webdriver.chrome.driver", "files/chromedriver.exe");
-		this.driver = new ChromeDriver();
+		// Fire up FireFox browser
+		this.driver = new FirefoxDriver();
 		this.select = new SelectPage(driver);
 
 		// Login to persist, take the version of the cloud and update the XML
