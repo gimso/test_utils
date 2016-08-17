@@ -5,8 +5,6 @@ import static global.Conversions.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -18,6 +16,7 @@ import global.FileUtil;
 import global.PropertiesUtil;
 import logging.LogcatLogger;
 import logging.PlugLogger;
+import regex.*;
 import svcp.beans.*;
 import svcp.enums.*;
 
@@ -29,7 +28,6 @@ import svcp.enums.*;
  */
 public class SVCPConversion {
 
-	private static final String SVCP_VERSION = "10";
 	private static final int LENGTH_INDEX = 1;
 	private static final int JUMBO = 0xff;
 	private static final int JUMBO_LENGTH_INDEX_2 = 3;
@@ -195,6 +193,7 @@ public class SVCPConversion {
 			case GET_ALL:
 				return byteArrayToHexString(value);
 			// default path / id on the vfs
+			case FILE_PATH:
 				if(value.equals(SetFiles.USIM_3G_PATH))
 					return SetFiles.USIM_3G_PATH.name();
 				else if(value.equals(SetFiles.SIM_2G_PATH))
@@ -259,8 +258,7 @@ public class SVCPConversion {
 			case CLOUD_CONNECTION:
 				return PowerSupplyFromMe.getPowerSupplyMode(byteArraysToInt(value)).name();
 			case ALLOWED_MODULES:
-				return AllowedModule.getAllowedModules(value).toString();
-			
+				return AllowedModule.getAllowedModules(value).toString();	
 			default:
 				break;
 		}
@@ -281,8 +279,8 @@ public class SVCPConversion {
 		if (input == null)
 			throw new IllegalArgumentException();
 
-			case ALLOWED_MODULES:
-				return AllowedModules.getAllowedModules(value).name();
+		int length = Header.HEADER_SIZE;
+		if (length > input.length)
 			throw new IllegalArgumentException();
 
 		int crc = 0;
@@ -292,7 +290,7 @@ public class SVCPConversion {
 
 		return (byte) crc;
 	}
-
+	
 	/**
 	 * Gets the payload length in byte array
 	 * 
@@ -372,46 +370,32 @@ public class SVCPConversion {
 	 * @param strings
 	 * @param id
 	 * @param opcode
+	 * @param optionalTlv
 	 * @return response 
 	 */
-	public static SVCPMessage getSvcpMsg(List<String> strings, String id, String opcode) {
-		// using regex can define groups (with '(' and ')' ) then they can be extracted  from text
-		// regex hex-string is \d (0-9) a-f, A-F. 
-		String defaultHexStr = "\\da-fA-f";
-		
-		// find and extract id 
-		id = (id == null) 
-			// if id is null, group the id using the defaultHexStr, the id must be 2 digits
-			? "([" + defaultHexStr + "]{2,2})" 
-			// else group by id as is
-			: "(" + id + ")";
-		
-		// find and extract opcode 
-		opcode = (opcode == null) 
-			// if opcode is null, group the opcode using 0 or 8 (request/response) {1 digit} and hex string digit {1 digit}, 
-			// the opcode must be 2 digits
-			? "([08]{1,1}[" + defaultHexStr + "]{1,1})"
-			// if got the opcode as one digit add 0 before is as default, else used the opcode as is
-			: opcode.length() < 2 ? "(0" + opcode + ")" : "(" + opcode + ")";
-		
-		// find and extract length, the length must be 4 digits
-		String lengthGroup = "([\\da-fA-f]{4,4})";
-		
-		// find and extract the whole SVCP
-		String svcpMsgGroup = "("+ SVCP_VERSION + id + opcode + lengthGroup + ".*)";
-		
-		// compile the pattern
-		Pattern pattern = Pattern.compile(svcpMsgGroup, Pattern.CASE_INSENSITIVE);
+	public static SVCPMessage getSvcpMsg(List<String> strings, String id, String opcode, String optionalTlv) {
+		String stringPattern = VPHTestPatterns.svcpPattern(id, opcode,optionalTlv);
 		for (String s : strings) {
-			//extract the matcher by the pattern
-			Matcher matcher = pattern.matcher(s);
-			if (matcher.find()) {
-				return new SVCPMessage(matcher.group(1));
+			String rv = GetMatch.getMathcer(s, stringPattern, VphTestGroup.WHOLE_SVCP_MESSAGE.getValue());
+			if (rv!=null) {
+				System.out.println(s);
+				return new SVCPMessage(rv);
 			}	
 		}
 		return null;
 	}
-
+	
+	/**
+	 * Extract the response by opcode (|&) id from logcat saved file
+	 * @param strings
+	 * @param id
+	 * @param opcode
+	 * @return response 
+	 */
+	public static SVCPMessage getSvcpMsg(List<String> strings, String id, String opcode) {
+		return getSvcpMsg(strings, id, opcode, "");
+	}
+	
 	/**
 	 * Extract the response from logcat file, Check that the response
 	 * extract after recognize the "sent data"
