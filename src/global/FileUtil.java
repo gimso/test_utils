@@ -2,21 +2,25 @@ package global;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.TeeOutputStream;
 
 import beans.FilePacket;
-import svcp.beans.SVCPMessage;
 
 /**
  * Utility to get info from Files
@@ -188,5 +192,23 @@ public class FileUtil {
 		}
 		System.err.println("String "+string + " was not found in\n" + file.getAbsolutePath());
 		return false;
+	}
+	
+	/**
+	 * Create file (if not exist), and append to it the console output 
+	 */
+	public static void printConsoleOutputToFile() {
+		// Get today's date as a string
+		String time = TimeAndDateConvertor.dateToString(new Date(), TimeAndDateConvertor.YYYY_MM_DD);
+		// Add the time to output file
+		File file = new File("output_" + time + ".txt");
+		System.out.println("Forward console printing to " + file.getAbsolutePath());
+		// create the file if not exist & redirect it to System.out (console) and to PrintStream (to the file)
+		try (PrintStream out = new PrintStream(new FileOutputStream(file, true))){
+			System.setOut(new PrintStream(new TeeOutputStream(System.out, out)));
+			System.setErr(new PrintStream(new TeeOutputStream(System.err, out)));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
