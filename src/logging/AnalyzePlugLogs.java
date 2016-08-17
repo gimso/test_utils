@@ -29,7 +29,7 @@ public class AnalyzePlugLogs {
 			if (string.contains(echo)) {
 				String date = string.substring(0, 23);
 				allEchosDates.add(TimeAndDateConvertor
-						.convertPlugStringToDate(date));
+						.plugStringToDate(date));
 			}
 		}
 		return allEchosDates;

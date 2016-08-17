@@ -136,7 +136,7 @@ public class TelemetryQueries {
 	 * when a trip is created, the billing marker = null, therefore must be set
 	 */
 	public void updateBillingMarkerDate(int tripId){
-		date = TimeAndDateConvertor.convertDateToCloudTripString(new Date());
+		date = TimeAndDateConvertor.dateToCloudTripString(new Date());
 		String sql = "UPDATE persist.trip_trip SET billing_time_marker = '" + date + "' WHERE id = " + tripId;
 		try(Connection connection = jdbc.getConnection()){
 			try (Statement statement = connection.createStatement()){
