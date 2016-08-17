@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TimeAndDateConvertor {
 	
-	public static final String LOGCAT_DD_MM_HH_MM_SS_SSS = /* 08-08 11:48:03.371 */"dd-MM HH:mm:ss.SSS";
+	public static final String LOGCAT_DD_MM_HH_MM_SS_SSS = /* 08-08 11:48:03.371 */"MM-dd HH:mm:ss.SSS";
 	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 	public static final String DD_MM_YYYY = "dd.MM.yyyy";
 	public static final String PLUG_DATE_YYYY_MM_DD_HH_MM_SS_SSS2 = "yyyy-MM-dd HH:mm:ss.SSS";
@@ -84,6 +84,7 @@ public class TimeAndDateConvertor {
 		}
 	}
 	
+	
 
 	/**
 	 * Get a difference between two dates
@@ -129,10 +130,12 @@ public class TimeAndDateConvertor {
 	 * Add to it todays year, unfotunetly the date in logcat came without year...
 	 * @param logcatDate
 	 * @return Date
+	 * 08-17 18:16:25.868 V/GUI     ( 3137): restartDimScreenTimeout for 50000
+
 	 */
-	public static Date extractLogcatDate(String logcatDate) {
-		Date date = stringToDate(logcatDate, LOGCAT_DD_MM_HH_MM_SS_SSS);
-		return addCurrentYearToDate(date);
+	public static Date logcatStringDateToDate(String logcatDate) {
+		logcatDate = getCurrentYear() + logcatDate ;
+		return stringToDate(logcatDate, "yyyy"+LOGCAT_DD_MM_HH_MM_SS_SSS);
 	}
 	
 	/**
@@ -140,80 +143,10 @@ public class TimeAndDateConvertor {
 	 * 11:48:03.371 I/ServersControl( 3250)" the date above extract as
 	 * 8.8.1970-11:48:03 this method add current year in the 1970 date extracted
 	 * from the format above
-	 * 
-	 * @param extractDate
-	 * @return actualDate
+	 * @return the current year as "yyyy" pattern
 	 */
-	public static Date addCurrentYearToDate(Date extractDate) {
-		Calendar instance = Calendar.getInstance();
-		instance.setTime(extractDate);
-		instance.add(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR) - instance.get(Calendar.YEAR));
-		Date actualDate = new Date(instance.getTimeInMillis());
-		return actualDate;
+	private static int getCurrentYear(){
+		return Calendar.getInstance().get(Calendar.YEAR);
 	}
-	
-	/**
-	 * Extract date from string date in format "YYYY.MM.dd HH:mm:ss.SSS"
-	 * 
-	 * @param String date
-	 * @return java.util.Date
-	 */
-//	public static Date extractDateFromString(String date) {
-//		try {
-//			return new SimpleDateFormat(YYYY_MM_DD_HH_MM_SS_SSS).parse(date);
-//		} catch (ParseException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
-	
-//	/**
-//	 * Extract String in format "YYYY.MM.dd HH:mm:ss.SSS" from date 
-//	 * @param date
-//	 * @return date-string
-//	 */
-//	public static String dateToString(Date date) {
-//		return new SimpleDateFormat().format(date);
-//	}
-	
-//	/**
-//	 * return string like the pattern "XX Min, XX Sec"
-//	 * @param date end
-//	 * @param date begin
-//	 * @return minutes and seconds between dates as String 
-//	 */
-//	public static String secondsBetween(Date end, Date begin) {
-//		return secondsBetween(end, begin, XX_MIN_XX_SEC);
-//	}
-//	
-//	/**
-//	 * @param date end
-//	 * @param date begin
-//	 * @return minutes and seconds between dates as String 
-//	 */
-//	public static String secondsBetween(Date end, Date begin, String pattern) {
-//		long millis = (end.getTime() - begin.getTime());
-//		String rv = String.format(pattern, 
-//				TimeUnit.MILLISECONDS.toMinutes(millis),
-//				TimeUnit.MILLISECONDS.toSeconds(millis)- TimeUnit.MINUTES.toSeconds(
-//				TimeUnit.MILLISECONDS.toMinutes(millis)));
-//		return rv;
-//	}
-//	
-//	/**
-//	 * same as  secondsBetween(Date end, Date begin) but in string format "YYYY.MM.dd HH:mm:ss.SSS"
-//	 * @param end
-//	 * @param begin
-//	 * @return minutes and seconds between dates as String 
-//	 */
-//	public static String secondsBetween(String end, String begin) {
-//		if (end != null && begin != null) {
-//			Date dEnd = stringToDate(end, YYYY_MM_DD_HH_MM_SS_SSS);
-//			Date dBegin = stringToDate(begin, YYYY_MM_DD_HH_MM_SS_SSS);
-//			return secondsBetween(dEnd, dBegin);
-//		}
-//		return null;
-//	}
-		
 	
 }
