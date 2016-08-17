@@ -229,8 +229,9 @@ public class Conversions {
 	
 	/**
 	 * Converts hex string (decimal value) to byte array
-	 * 
+	 * Assume String byte array size conversion < Byte array size
 	 * @param hexString
+	 * @param arraySize
 	 * @return byte array
 	 */
 	public static byte[] hexStringToByteArray(String hexString, int arraySize) {
