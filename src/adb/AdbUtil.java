@@ -746,35 +746,6 @@ public class AdbUtil {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	* send adb logcat coammand, it wait by default to device until log stream started, unless there is unexpected exception it reruns true;
-	*/
-	private static boolean isDeviceConnected() {
-		try {
-			
-			Process process = Runtime.getRuntime().exec(new String[] { CMD_EXE, LOCAL_DISK,"adb logcat"});
-
-			BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-			String s = null;
-			while ((s = stdInput.readLine()) != null){
-				
-				try {Thread.sleep(1200);} catch (InterruptedException e) {}
-				
-				if (!s.equals("- waiting for device -")){
-					//in order to avoid offline issues, wait 5 seconds after getting connection
-					try {Thread.sleep(5000);} catch (InterruptedException e) {}
-					
-					return true;
-				}
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
 
 	public static boolean isDeviceOffline() {
 		String offline = "offline";

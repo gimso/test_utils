@@ -127,7 +127,7 @@ public class Analyze_cloud_logs {
 			String plug = mss.get("plug");
 			if (plug.equalsIgnoreCase(phone.getTestData().getPlugId()))
 				echoCloud.add(TimeAndDateConvertor
-						.convertCloudStringToDate(timeStamp));
+						.cloudStringToDate(timeStamp));
 		}
 		return echoCloud;
 	}

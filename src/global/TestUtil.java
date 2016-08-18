@@ -260,9 +260,9 @@ public class TestUtil {
 
 		if (isNumberEquals && allEchosDatesInPlug.size() <= allEchosDatesInCloud.size()) {
 			for (int i = 0; i < allEchosDatesInPlug.size(); i++) {
-				String diff = TimeAndDateConvertor.getDiffBetweenDates(allEchosDatesInPlug.get(i),
+				long diff = TimeAndDateConvertor.getDiffBetweenDates(allEchosDatesInPlug.get(i),
 						allEchosDatesInCloud.get(i), TimeUnit.SECONDS);
-				if (Integer.valueOf(diff) > 10) {
+				if (diff > 10) {
 					String errorMessage = "The echo was by the phone device at " + allEchosDatesInPlug.get(i)
 							+ " , but was received on the cloud only on " + allEchosDatesInCloud.get(i)
 							+ " . The difference is more than 10 seconds";

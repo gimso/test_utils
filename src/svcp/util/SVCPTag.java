@@ -2,6 +2,7 @@ package svcp.util;
 
 import global.Conversions;
 import svcp.beans.TLV;
+import svcp.enums.AllowedModule;
 import svcp.enums.ApplyUpdate;
 import svcp.enums.CloudConnection;
 import svcp.enums.FileType;
@@ -107,22 +108,26 @@ public class SVCPTag {
 		byte value = (byte) resultTag.getValue();
 		return new TLV(Tag.RESULT_TAG, value);
 	}
-
+	
 	/**
-	 * Create vsim id TLV 5.1. vSIM ID (0x01) </br>
-	 * Description: A unique ID given to each vSIM. </br>
-	 * Encoding: 12 bytes where each byte is between "0" and "9". </br>
-	 * Example: 000010004321
+	 * Description: defines allowed logger modules for use with "set logging"
+	 * opcode (0x02).
 	 * 
-	 * @param vsimId
-	 * 
-	 * @return byte[]
+	 * @param zero or more AllowedModule objects
+	 * @return TLV include one or more AllowedModule objects
 	 */
-	public static TLV vsimId(String vsimId) {
-		if(vsimId == null)
-			return new TLV (Tag.VSIM_ID);
-		else
-			return new TLV(Tag.VSIM_ID, Conversions.stringNumsToByteArray(vsimId));
+	public static TLV allowedModules(AllowedModule... allowedModules) {
+		if (allowedModules == null)
+			return new TLV(Tag.ALLOWED_MODULES);
+		else {
+			byte[] values = new byte[allowedModules.length * AllowedModule.ALLOW_MODULE_VALUE_SIZE];
+			int index = 0;
+			for (AllowedModule module : allowedModules) {
+				System.arraycopy(module.getValue(), 0, values, index, AllowedModule.ALLOW_MODULE_VALUE_SIZE);
+				index = index + AllowedModule.ALLOW_MODULE_VALUE_SIZE;
+			}
+			return new TLV(Tag.ALLOWED_MODULES, values);
+		}
 	}
 
 	/**
