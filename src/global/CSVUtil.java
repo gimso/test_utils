@@ -6,6 +6,8 @@ import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 
+import regex.Event;
+
 public class CSVUtil {
 	public static File csvFile = new File("result.csv");
 	/***
@@ -17,7 +19,7 @@ public class CSVUtil {
 	 * @param date
 	 */
 	public static void writeVPHTestsCSVFile(String event, Date date, String result) {
-		String testId = PropertiesUtil.getInstance().getProperty("reboot");		
+		String testId = PropertiesUtil.getInstance().getProperty(Event.REBOOT.name());		
 		result = result != null ? result : "";
 		long time = date != null ? date.getTime() : -1;
 		String csvData = testId + ", " + event + ", " + time + ", " + result + "\n";

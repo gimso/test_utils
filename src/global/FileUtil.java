@@ -204,7 +204,8 @@ public class FileUtil {
 		File file = new File("output_" + time + ".txt");
 		System.out.println("Forward console printing to " + file.getAbsolutePath());
 		// create the file if not exist & redirect it to System.out (console) and to PrintStream (to the file)
-		try (PrintStream out = new PrintStream(new FileOutputStream(file, true))){
+		try {
+			PrintStream out = new PrintStream(new FileOutputStream(file, true));
 			System.setOut(new PrintStream(new TeeOutputStream(System.out, out)));
 			System.setErr(new PrintStream(new TeeOutputStream(System.err, out)));
 		} catch (FileNotFoundException e) {

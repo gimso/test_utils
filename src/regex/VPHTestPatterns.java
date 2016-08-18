@@ -2,7 +2,44 @@ package regex;
 
 public class VPHTestPatterns {
 	public static final String SVCP_VERSION = "(10)";
-
+	
+	//Groups
+	public static final int SERVER_AUTH_RESP_RT_GROUP = 3;
+	public static final int ATMEL_AUTH_RESP_RT_GROUP = 3;
+	public static final int AUTH_DATA_GROUP = 4;
+	public static final int DATE_GROUP = 1;
+	
+	public static final String
+		//08-04 09:20:59.359 		
+		DATE = "^(\\d{2,2}-\\d{2,2}\\s\\d{2,2}:\\d{2,2}:\\d{2,2}\\.\\d{3,3}).*",
+			
+		//08-04 09:20:59.359 I/ServersControl( 3126): Network info: NetworkInfo: type: 3GMobile[HSDPA], state: CONNECTED/CONNECTED, reason: connected, extra: internetd.gdsp, roaming: true, failover: false, isAvailable: true, isConnectedToProvisioningNetwork: false, subscription: 0
+		_3G_CONNECTION = DATE + "(Network info:).*(3GMobile\\[HSDPA\\]).*(state:\\sCONNECTED\\/CONNECTED)", 
+		
+		//08-18 14:23:04.644 D/VirtualSim( 2996): USIM: RSIM post process using default values
+		RSIM = DATE + "(RSIM post process)",
+		
+		//08-09 11:16:40.990 D/VirtualSim( 3262): USIM: Got authentication. Header(0088008122) Data(34) State(0x0005->0x0005)
+		ATMEL_GOT_AUTH_REQ = DATE + "(VirtualSim).*(USIM: Got authentication)",
+			
+		//08-09 11:16:16.170 I/VSimControl( 3262): Received handle data: id:-40 opcode:VSIM_AUTHENTICATION request data:Bundle[{authentication=008800812210646dedc7b59886939121f9e30006d3a710c16b555391218000db9b44d10bbbf403}]
+		VSIM_CONTROL_GOT_AUTH_REQ = DATE +"(VSimControl).*(opcode:VSIM_AUTHENTICATION).*authentication=([\\da-fA-F]+)",
+			
+		//08-09 11:16:16.220 D/ServersControl( 3262): Sending cloud request to http://gw.skylab.simgo.me:80/api/v1/authentication/2850 1 {"auth_request":"008800812210646dedc7b59886939121f9e30006d3a710c16b555391218000db9b44d10bbbf403","device_id":"000040001016"}
+		SERVERS_CONTROL_GOT_AUTH_REQ= DATE +"(ServersControl).*Sending cloud request to\\s(.*authentication\\/\\d+).*\"auth_request\":\"([a-fA-F\\d]+)",
+			
+		//08-09 11:16:19.750 D/ServersControl( 3262): Received response after: 3552 {"resp_status":{"info":"Success!","code":0},"auth_response":"db08f7f2de3b3e4555491015f62eb477bfbae8cc30fb2df7460dd710385a1fe26a96bef29a8849fd26fe72c6087b148386cc917b0b"}
+		SERVERS_CONTROL_GOT_AUTH_RES  = DATE +"(ServersControl).*Received response after: (\\d+).*auth_response\":\"([\\da-fA-F]+)",
+			
+		//08-09 11:16:19.760 I/VSimControl( 3262): Received incoming message from servers service: AUTHENTICATION data: Bundle[mParcelledData.dataSize=368]
+		VSIM_CONTROL_GOT_AUTH_RES = DATE +"(VSimControl).*Received incoming message.*AUTHENTICATION", 
+			
+		//08-09 11:16:44.050 D/VirtualSim( 3262): VSIM: Authentication received in 3360 ms (success)
+		ATMEL_GOT_AUTH_RES = DATE +"(VirtualSim).*Authentication received in (\\d+)",
+			
+		//07-25 17:19:21.263 I/GUI     ( 3350): onDataConnectionStateChanged state:2 networkType:13
+		_4G_CONNECTION = DATE +"(GUI).*onDataConnectionStateChanged\\s(state:2)";
+	
 	/**
 	 * The following groups included</br>
 	 * Group 1 - the whole svcp message Group 2 - the svcp message header id
