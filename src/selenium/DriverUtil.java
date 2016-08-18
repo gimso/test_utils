@@ -80,6 +80,27 @@ public interface DriverUtil {
 		getDriver().findElement(By.id(elementId)).submit();
 		getDriver().findElement(By.linkText(elementText)).click();
 	}
+
+	/**
+	 * A generic method for applying an action on all table elements.</br>
+	 * Click on "select all" checkbox and select an action from a drop down list
+	 * 
+	 * @param selectAllXPath
+	 * @param actionName
+	 * @param action
+	 */
+	public default void selectActionForAllElements(String selectAllXPath, String actionName, String action) {
+		// click on "select all" checkbox
+		getDriver().findElement(By.xpath(selectAllXPath)).click();
+		// select a desired action
+		getDriver().findElement(By.name(actionName)).sendKeys(action);
+		// click on "Go"
+		String nameGoButton = "index";
+		if (getDriver().findElement(By.name(nameGoButton)) != null) {
+			getDriver().findElement(By.name(nameGoButton)).click();
+		}
+	}
+
 	// *******************************
 	// Error Checking
 	// ********************************
