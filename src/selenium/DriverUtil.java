@@ -9,13 +9,14 @@ import testing_utils.TestOutput;
 
 /**
  * 
- * @author Yehuda & Dana 
+ * @author Yehuda & Dana
  *
  */
 public interface DriverUtil {
 	/**
 	 * Select item found elementId and click by visible text, Surrounded with
 	 * try and catch if element is not there.
+	 * 
 	 * @param visibleText
 	 * @param elementId
 	 */
@@ -52,6 +53,7 @@ public interface DriverUtil {
 
 	/**
 	 * Delete inside component page (where all the details of items been)
+	 * 
 	 * @param name
 	 */
 	public default void deleteByLinkTextName(String name) {
@@ -65,6 +67,19 @@ public interface DriverUtil {
 		}
 	}
 
+	/**
+	 * Search for an element, click on the search result.</br>
+	 * Useful for cases of multiple pages when the element is not on the first
+	 * page
+	 * 
+	 * @param elementId
+	 * @param elementText
+	 */
+	public default void searchAndClickOnElement(String elementId, String elementText) {
+		getDriver().findElement(By.id(elementId)).sendKeys(elementText);
+		getDriver().findElement(By.id(elementId)).submit();
+		getDriver().findElement(By.linkText(elementText)).click();
+	}
 	// *******************************
 	// Error Checking
 	// ********************************
@@ -145,7 +160,8 @@ public interface DriverUtil {
 
 	/**
 	 * Generic 'Delete all' from table</br>
-	 * for every combination of delete, e.g. "delete all selected items", "delete fw versions" etc.</br>
+	 * for every combination of delete, e.g. "delete all selected items",
+	 * "delete fw versions" etc.</br>
 	 * "are you sure" or "Go" buttons exist
 	 */
 	public default String deleteAllFromTablePage() {
@@ -163,12 +179,12 @@ public interface DriverUtil {
 						break;
 					}
 				}
-				//in case a "Go" button exists, click on it
+				// in case a "Go" button exists, click on it
 				String nameGoButton = "index";
 				if (getDriver().findElement(By.name(nameGoButton)) != null) {
 					getDriver().findElement(By.name(nameGoButton)).click();
 				}
-				//in case an "I'm sure" button exists, click on it
+				// in case an "I'm sure" button exists, click on it
 				String xpathImSure = "//input[@value=\"Yes, I'm sure\"]";
 				if (getDriver().findElement(By.xpath(xpathImSure)) != null) {
 					getDriver().findElement(By.xpath(xpathImSure)).click();
