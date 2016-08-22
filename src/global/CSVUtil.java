@@ -11,19 +11,36 @@ public class CSVUtil {
 	private long id;
 	private String fileName;
 
-	public CSVUtil(String name, Date id) {
+	private static CSVUtil csvUtil;
+
+	/**
+	 * Get instance from no parameter CTOR
+	 * 
+	 * @return PropertiesUtil
+	 */
+	public static CSVUtil getInstance(String name, Date id) {
+		if (csvUtil == null)
+			return new CSVUtil( name,  id);
+		else
+			return csvUtil;
+	}
+
+	public static CSVUtil getInstance(Date id) {
+		return getInstance(null, id);
+	}
+
+	public static CSVUtil getInstance() {
+		return getInstance(null, null);
+	}
+
+	private CSVUtil(String name, Date id) {
+		name = name != null ? name : "result.csv";
 		this.setFileName(name);
-		if(id!=null)this.id = id.getTime();
+		if (id != null)
+			this.id = id.getTime();
 		this.file = new File(fileName);
 	}
 
-	public CSVUtil(Date id) {
-		this("result.csv", id);
-	}
-	
-	public CSVUtil() {
-		this("result.csv", null);
-	}
 	
 	/***
 	 * Write results to CSV file:
