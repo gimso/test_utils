@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
@@ -41,9 +40,7 @@ public class LogcatToFile implements Subscriber {
 		String folder = "Logcat Logger";
 		String path = System.getProperty("user.dir");
 		Date date = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-		String time = formatter.format(date);
-		String cmdToFile = path + "\\" + folder + "\\" + time + ".txt";
+		String cmdToFile = path + "\\" + folder + "\\" + date.getTime() + ".txt";
 		return cmdToFile;
 	}
 
