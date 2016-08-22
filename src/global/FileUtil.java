@@ -212,4 +212,29 @@ public class FileUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Extract all Files from folder recursively
+	 * 
+	 * @param folderName
+	 * @return List of Files
+	 */
+	public static List<File> getFilesFromFolder(String folderName) {
+		List<File> logcatFiles = new ArrayList<>();
+		if (!new File(folderName).exists()) {
+			System.err.println("Folder " + folderName + " is not exist");
+			return null;
+		}
+		try {
+			Files.walk(Paths.get(folderName)).forEach(filePath -> {
+				if (Files.isRegularFile(filePath)) {
+					logcatFiles.add(filePath.toFile());
+				}
+			});
+			return logcatFiles;// .forEach(System.out::println);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

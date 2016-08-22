@@ -6,10 +6,25 @@ import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 
-import regex.Event;
-
 public class CSVUtil {
-	public static File csvFile = new File("result.csv");
+	private File file; 
+	private long id;
+	private String fileName;
+
+	public CSVUtil(String name, Date id) {
+		this.setFileName(name);
+		if(id!=null)this.id = id.getTime();
+		this.file = new File(fileName);
+	}
+
+	public CSVUtil(Date id) {
+		this("result.csv", id);
+	}
+	
+	public CSVUtil() {
+		this("result.csv", null);
+	}
+	
 	/***
 	 * Write results to CSV file:
 	 * The CSV format: ID, Header, Result, Date
@@ -18,13 +33,12 @@ public class CSVUtil {
 	 * @param result
 	 * @param date
 	 */
-	public static void writeVPHTestsCSVFile(String event, Date date, String result) {
-		String testId = PropertiesUtil.getInstance().getProperty(Event.REBOOT.name());		
+	public  void writeVPHTestsCSVFile(String event, Date date, String result) {
 		result = result != null ? result : "";
 		long time = date != null ? date.getTime() : -1;
-		String csvData = testId + ", " + event + ", " + time + ", " + result + "\n";
+		String csvData = this.id + ", " + event + ", " + time + ", " + result + "\n";
 		try {
-			FileUtils.writeStringToFile(csvFile, csvData, true);
+			FileUtils.writeStringToFile(file, csvData, true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -39,8 +53,30 @@ public class CSVUtil {
 	 * @param result
 	 * @param date
 	 */
-	public static void writeVPHTestsCSVFile(String event, Date date) {
+	public  void writeVPHTestsCSVFile(String event, Date date) {
 		writeVPHTestsCSVFile(event, date, "");
+	}
+
+	public  long getId() {
+		return id;
+	}
+
+	public  void setId(long id) {
+		this.id = id;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public File getCsvFile() {
+		return file;
+	}
+
+	public void setCsvFile(File csvFile) {
+		this.file = csvFile;
 	}
 	
 	

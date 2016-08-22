@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class TimeAndDateConvertor {
-	
+	public static final String YYYY_MM_DD_HH_MM_SS_NO_SPACE="yyyy-MM-dd_HH-mm-ss";//2016-08-08_11-45-18.txt
 	public static final String LOGCAT_DD_MM_HH_MM_SS_SSS = /* 08-08 11:48:03.371 */"MM-dd HH:mm:ss.SSS";
 	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 	public static final String DD_MM_YYYY = "dd.MM.yyyy";
