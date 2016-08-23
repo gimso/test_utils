@@ -2,10 +2,13 @@ package sim_management.allocation_policies;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
 import selenium.SimDriverUtil;
 import selenium.SimPageSelect;
-
+/**
+ * 
+ * @author Dana
+ *
+ */
 public class ForcedSims {
 	private WebDriver driver;
 	private SimPageSelect select;
@@ -81,10 +84,10 @@ public class ForcedSims {
 	 * 
 	 * @param deviceId
 	 * @param newDeviceId
-	 * @param profile
+	 * @param newProfile
 	 * @return message
 	 */
-	public String modifyByDeviceId(String deviceId, String newDeviceId, String profile, Boolean exclusive) {
+	public String modifyByDeviceId(String deviceId, String newDeviceId, String newProfile, Boolean newExclusive) {
 		select.selectForcedSims();
 		//click on the device id
 		driver.findElement(By.linkText(deviceId)).click();
@@ -94,11 +97,11 @@ public class ForcedSims {
 			driver.findElement(By.className(CLASS_DEVICE_ID)).sendKeys(newDeviceId);
 		}
 		// select sim from the list
-		if (profile != null) {
-			simDriverUtil.selectByVisibleText(ID_PROFILE, profile);
+		if (newProfile != null) {
+			simDriverUtil.selectByVisibleText(ID_PROFILE, newProfile);
 		}
 		//click on the exclusive check box if exclusive = true
-		simDriverUtil.clickCheckIfNeeded(ID_PROFILE, exclusive);
+		simDriverUtil.clickCheckIfNeeded(ID_EXCLUSIVE, newExclusive);
 		//save
 		driver.findElement(By.name(NAME_SAVE)).click();
 		return simDriverUtil.finalCheck();
@@ -125,20 +128,5 @@ public class ForcedSims {
 		select.selectForcedSims();
 		simDriverUtil.deleteAllFromTablePage();
 		return simDriverUtil.finalCheck();
-	}
-
-	/*
-	 * on modify: exclusive is not changed whether true is inserted or false.
-	 * need to check 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		ForcedSims fc = new ForcedSims();
-//		 fc.add("5555555", "898120009190000184315");
-		// fc.add("222222", "89014103255800905581", false);
-		// fc.modifyByDeviceId("66666666", "5555555", "89014103255800905581", "89886015137708805220", null);
-		 fc.modifyByDeviceId("5555555", null, "89972011112040101234", true);//89972011112040101234
-//		 fc.deleteByDeviceId("5555555");
-//		fc.deleteAll();
 	}
 }
