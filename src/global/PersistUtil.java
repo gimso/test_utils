@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -27,6 +28,7 @@ public class PersistUtil {
 
 	private WebDriver driver;
 	private SelectPage select;
+	private FirefoxProfile prof;
 
 	private static volatile PersistUtil instance = null;
 
@@ -47,10 +49,13 @@ public class PersistUtil {
 	 * initializing properties,driver,select and db connection
 	 */
 	private PersistUtil() {
-
-	
+		// Set Firefox to ignore first page
+		this.prof = new FirefoxProfile();
+		prof.setPreference("browser.startup.homepage_override.mstone", "ignore");
+		prof.setPreference("startup.homepage_welcome_url.additional",  "about:blank");
+		
 		// Fire up FireFox browser
-		this.driver = new FirefoxDriver();
+		this.driver = new FirefoxDriver(prof);
 		this.select = new SelectPage(driver);
 
 		// Login to persist, take the version of the cloud and update the XML
