@@ -75,9 +75,9 @@ public interface DriverUtil {
 	 * @param elementId
 	 * @param elementText
 	 */
-	public default void searchAndClickOnElement(String elementId, String elementText) {
-		getDriver().findElement(By.id(elementId)).sendKeys(elementText);
-		getDriver().findElement(By.id(elementId)).submit();
+	public default void searchAndClickOnElement(String searchBarId, String elementText) {
+		getDriver().findElement(By.id(searchBarId)).sendKeys(elementText);
+		getDriver().findElement(By.id(searchBarId)).submit();
 		getDriver().findElement(By.linkText(elementText)).click();
 	}
 
