@@ -1,8 +1,11 @@
 package regex;
 
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import global.TimeAndDateConvertor;
 
 /***
  * This class is utility for finding a regex by pattern
@@ -88,5 +91,19 @@ public class GetMatch {
 	public static String findInLog(List<String> input, String patternStr) {
 		return findInLog(input, patternStr, null);
 	}
-
+	
+	/**
+	 * Get any logcat line and extract the date from it. Assumption: logcat line
+	 * is with date
+	 * 
+	 * @param line
+	 * @return Date
+	 */
+	public static Date dateFromLogcatLine(String line) {
+		Pattern pattern = Pattern.compile(VPHTestPatterns.DATE);
+		Matcher matcher = pattern.matcher(line);
+		if (matcher.find())
+			return TimeAndDateConvertor.logcatStringDateToDate(matcher.group(1));
+		return null;
+	}
 }
