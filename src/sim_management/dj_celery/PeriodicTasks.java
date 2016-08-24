@@ -29,7 +29,17 @@ public class PeriodicTasks {
 		this.driver = simDriverUtil.getDriver();
 	}
 	
-	
+	/**
+	 * Add Peridoic task
+	 * 
+	 * @param name
+	 * @param registeredTask
+	 * @param customTask
+	 * @param enabled
+	 * @param interval
+	 * @param crontab
+	 * @return message
+	 */
 	public String add(
 			String name, 
 			String registeredTask, 
@@ -73,7 +83,18 @@ public class PeriodicTasks {
 		return simDriverUtil.finalCheck();
 	}
 	
-	
+	/**
+	 * Modify periodic task
+	 * 
+	 * @param name
+	 * @param newName
+	 * @param newRegisteredTask
+	 * @param newCustomTask
+	 * @param enabled
+	 * @param newInterval
+	 * @param newCrontab
+	 * @return message
+	 */
 	public String modify(
 			String name, 
 			String newName, 

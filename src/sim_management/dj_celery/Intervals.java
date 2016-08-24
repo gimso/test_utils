@@ -25,6 +25,13 @@ public class Intervals {
 		this.driver = simDriverUtil.getDriver();
 	}
 
+	/**
+	 * Add Interval
+	 * 
+	 * @param every
+	 * @param period
+	 * @return message
+	 */
 	public String add(String every, String period) {
 		// go to intervals page
 		select.selectIntervals();
@@ -44,6 +51,14 @@ public class Intervals {
 		return simDriverUtil.finalCheck();
 	}
 
+	/**
+	 * Modify Interval
+	 * 
+	 * @param interval
+	 * @param every
+	 * @param period
+	 * @return message
+	 */
 	public String modify(String interval, String every, String period) {
 		// go to intervals page
 		select.selectIntervals();
