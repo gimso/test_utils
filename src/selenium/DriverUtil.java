@@ -4,7 +4,10 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import global.PropertiesUtil;
 import testing_utils.TestOutput;
 
 /**
@@ -13,6 +16,31 @@ import testing_utils.TestOutput;
  *
  */
 public interface DriverUtil {
+	
+	/**
+	 * Get URL
+	 * @return url
+	 */
+	public String getUrl();
+	
+	
+	/**
+	 * Login to web driver
+	 */
+	public default void login() {
+		// if couldn't find the element (because of Internet speed etc), it will
+		// wait another 10 seconds without throwing exception
+		WebDriverWait wait = new WebDriverWait(getDriver(), 10);// 1 minute
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("id_username")));
+
+		getDriver().findElement(By.id("id_username")).clear();
+		getDriver().findElement(By.id("id_username")).sendKeys(PropertiesUtil.getInstance().getProperty("USER"));
+		getDriver().findElement(By.id("id_password")).clear();
+		getDriver().findElement(By.id("id_password")).sendKeys(PropertiesUtil.getInstance().getProperty("PASSWORD"));
+		getDriver().findElement(By.cssSelector("input[type=\"submit\"]")).click();
+	}
+	
+	
 	/**
 	 * Select item found elementId and click by visible text, Surrounded with
 	 * try and catch if element is not there.
@@ -27,7 +55,7 @@ public interface DriverUtil {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * Delete in the global page (where all elements in table) A global method
 	 * that after checking (selecting) an table columns id delete them
