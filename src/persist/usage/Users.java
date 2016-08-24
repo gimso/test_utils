@@ -132,7 +132,7 @@ public class Users {
 		// registrationDate
 		if (registrationDate != null) {
 			driver.findElement(By.id(ID_REGISTRATION_DATE)).clear();
-			driver.findElement(By.id(ID_REGISTRATION_DATE)).sendKeys(TimeAndDateConvertor.convertDateToString(registrationDate));
+			driver.findElement(By.id(ID_REGISTRATION_DATE)).sendKeys(TimeAndDateConvertor.dateToString(registrationDate));
 		}
 		
 		// save
@@ -251,7 +251,7 @@ public class Users {
 		if (registrationDate != null) {
 			// registrationDate
 			driver.findElement(By.id(ID_REGISTRATION_DATE)).clear();
-			driver.findElement(By.id(ID_REGISTRATION_DATE)).sendKeys(TimeAndDateConvertor.convertDateToString(registrationDate));
+			driver.findElement(By.id(ID_REGISTRATION_DATE)).sendKeys(TimeAndDateConvertor.dateToString(registrationDate));
 		}
 		
 		// save
