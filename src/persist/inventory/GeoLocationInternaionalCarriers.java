@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import selenium.PersistUtil;
-import selenium.SelectPage;
+import selenium.PersistPageSelect;
 /**
  * This class is Added Modified and Delete Geolocation International Carrier in
  * Geolocation International Carrier page
@@ -20,7 +20,7 @@ public class GeoLocationInternaionalCarriers {
 	private static final String NAME_SAVE = "_save";
 
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public GeoLocationInternaionalCarriers() {

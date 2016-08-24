@@ -8,7 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import selenium.PersistUtil;
-import selenium.SelectPage;
+import selenium.PersistPageSelect;
 
 /**
  * 
@@ -17,7 +17,7 @@ import selenium.SelectPage;
  */
 public class ArchivedTrips {
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public ArchivedTrips() {

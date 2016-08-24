@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import selenium.PersistUtil;
-import selenium.SelectPage;
+import selenium.PersistPageSelect;
 
 public class Users {
 	private static final String LINK_TEXT_ADD_PLUG_TYPE = "Add plug type";
@@ -12,7 +12,7 @@ public class Users {
 	private static final String NAME_SAVE = "_save";
 
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public Users (PersistUtil persistUtil) {

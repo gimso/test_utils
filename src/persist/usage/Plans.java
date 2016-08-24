@@ -2,7 +2,7 @@ package persist.usage;
 
 import global.PersistException;
 import selenium.PersistUtil;
-import selenium.SelectPage;
+import selenium.PersistPageSelect;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -45,7 +45,7 @@ public class Plans {
 	private static final String NAME_SAVE = "_save";
 
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public Plans() {

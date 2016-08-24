@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import global.PersistException;
 import global.TimeAndDateConvertor;
 import selenium.PersistUtil;
-import selenium.SelectPage;
+import selenium.PersistPageSelect;
 /**
  * This class is Added Modified and Delete User under persist.usage.User page
  * @author Yehuda Ginsburg
@@ -31,7 +31,7 @@ public class Users {
 	private static final String NAME_SAVE = "_save";
 	
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public Users() {

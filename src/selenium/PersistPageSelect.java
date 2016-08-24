@@ -10,14 +10,14 @@ import global.PropertiesUtil;
  * 
  * @author Yehuda Ginsburg
  */
-public class SelectPage {
+public class PersistPageSelect {
 	private static final String INVENTORY_URL = PropertiesUtil.getInstance().getProperty("EC2_PERSIST_URL_HOME") + "inventory/";
 	private static final String TRIP_URL = 		PropertiesUtil.getInstance().getProperty("EC2_PERSIST_URL_HOME") + "trip/";
 	private static final String USAGE_URL = 	PropertiesUtil.getInstance().getProperty("EC2_PERSIST_URL_HOME") + "usage/";
 
 	private WebDriver driver;
 
-	public SelectPage(WebDriver driver) {
+	public PersistPageSelect(WebDriver driver) {
 		this.driver = driver;
 	}
 
