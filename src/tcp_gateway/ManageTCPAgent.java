@@ -21,7 +21,7 @@ public class ManageTCPAgent {
     private DataOutputStream mTCPOutputStream;
     private InputStream mTCPInputStream;
     private String url = "gwtcp.qa.gimso.net";
-
+ 
 
   
 
@@ -64,7 +64,7 @@ public class ManageTCPAgent {
 
     
     public boolean createNewTcpSocket(String cloudUrl) {
-    	return createNewTcpSocket(cloudUrl, 5150);
+    	return createNewTcpSocket(cloudUrl, 5151);
     }
 
     public boolean createNewTcpSocket(String cloudUrl,int port) {
@@ -80,8 +80,8 @@ public class ManageTCPAgent {
 
             mTCPOutputStream = new DataOutputStream((TCPSocket.getOutputStream()));
             mTCPInputStream = TCPSocket.getInputStream();
-            System.out.println( String.format("Opened new TCP Socket in %d ms"));
-            TCPSocket.close();
+            System.out.println( String.format("Opened new TCP Socket"));
+           // TCPSocket.close();
             return true;
         } catch (IOException aE) {
             aE.printStackTrace();

@@ -23,7 +23,13 @@ public class ProtocolInterface {
 	    return TCPMessage.encodeMessage(Opcode.AUTHENTICATION, tlvs);
 	}
 	
-	
+	public byte [] sendKeepAlive(){
+		
+		byte [] keepAliveRequest =  TCPMessage.encodeMessage(Opcode.KEEP_ALIVE, new byte[]{});
+		byte[] keepAliveResponse = tcp.sendMessage(keepAliveRequest);
+		return keepAliveResponse;
+	}
+		
 	
 	public TCPMessage sendAuthRequestAndGetResponse (int allocationId, String authKey, String deviceId) {
 		
