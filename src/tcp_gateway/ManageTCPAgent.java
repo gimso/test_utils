@@ -66,8 +66,17 @@ public class ManageTCPAgent {
     public boolean createNewTcpSocket(String cloudUrl) {
     	return createNewTcpSocket(cloudUrl, 5151);
     }
+    
+   public boolean createNewTcpSocket (String cloudUrl, int port) {
+	    return createNewTcpSocket(cloudUrl,port, true, 0);
+    	
+    }
+   
+   public boolean createNewTcpSocket (String cloudUrl, boolean closeSocket, long milliseconds) {
+	   return createNewTcpSocket(cloudUrl, 5150, closeSocket, milliseconds);
+   }
 
-    public boolean createNewTcpSocket(String cloudUrl,int port) {
+    public boolean createNewTcpSocket(String cloudUrl,int port, boolean closeSocket, long milliseconds) {
         try {
             Socket TCPSocket = new Socket();
             TCPSocket.bind(null);
@@ -81,12 +90,34 @@ public class ManageTCPAgent {
             mTCPOutputStream = new DataOutputStream((TCPSocket.getOutputStream()));
             mTCPInputStream = TCPSocket.getInputStream();
             System.out.println( String.format("Opened new TCP Socket"));
-           // TCPSocket.close();
-            return true;
+            
+            
+            if (closeSocket == true){
+            	TCPSocket.close();
+            	return true;
+            }
+            
+            else{
+            	try {
+					Thread.sleep(milliseconds);
+					TCPSocket.close();
+					return true;
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					TCPSocket.close();
+					return false;
+				}
+            }
+            
         } catch (IOException aE) {
             aE.printStackTrace();
             System.out.println( aE.getMessage());
             return false;
         }
     }
+    
+    
+    
+ 
 }
