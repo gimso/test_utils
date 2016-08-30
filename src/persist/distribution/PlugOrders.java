@@ -3,8 +3,8 @@ package persist.distribution;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import global.PersistUtil;
-import global.SelectPage;
+import selenium.PersistUtil;
+import selenium.PersistPageSelect;
 
 public class PlugOrders {
 	private static final String LINK_TEXT_ADD_PLUG_TYPE = "Add plug type";
@@ -12,7 +12,7 @@ public class PlugOrders {
 	private static final String NAME_SAVE = "_save";
 
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public PlugOrders (PersistUtil persistUtil) {

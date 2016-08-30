@@ -3,12 +3,12 @@ package persist.usage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import global.PersistUtil;
-import global.SelectPage;
+import selenium.PersistUtil;
+import selenium.PersistPageSelect;
 
 public class Allocations {
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public Allocations() {

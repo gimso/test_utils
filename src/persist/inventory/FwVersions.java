@@ -3,8 +3,8 @@ package persist.inventory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import global.PersistUtil;
 import global.PropertiesUtil;
+import selenium.PersistUtil;
 
 /**
  * This class managed to add modify and delete firmware version page

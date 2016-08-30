@@ -1,7 +1,7 @@
 package persist.inventory;
 
-import global.PersistUtil;
-import global.SelectPage;
+import selenium.PersistUtil;
+import selenium.PersistPageSelect;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,7 +19,7 @@ public class AccessNumberGroups {
 	private static final String NAME_SAVE = "_save";
 
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public AccessNumberGroups() {

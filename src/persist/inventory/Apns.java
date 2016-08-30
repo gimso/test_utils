@@ -3,8 +3,8 @@ package persist.inventory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import global.PersistUtil;
-import global.SelectPage;
+import selenium.PersistUtil;
+import selenium.PersistPageSelect;
 
 /**
  * This class is Added Modified and Delete apn in apn page
@@ -23,7 +23,7 @@ public class Apns {
 	private static final String NAME_SAVE = "_save";
 
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public Apns() {

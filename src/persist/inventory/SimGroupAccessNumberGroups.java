@@ -3,8 +3,8 @@ package persist.inventory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import global.PersistUtil;
-import global.SelectPage;
+import selenium.PersistUtil;
+import selenium.PersistPageSelect;
 
 public class SimGroupAccessNumberGroups {
 	private static final String ID_SIM_GROUP = "id_sim_group";
@@ -14,7 +14,7 @@ public class SimGroupAccessNumberGroups {
 	private static final String NAME_SAVE = "_save";
 
 	private WebDriver driver;
-	private SelectPage select;
+	private PersistPageSelect select;
 	private PersistUtil persistUtil;
 
 	public SimGroupAccessNumberGroups() {
