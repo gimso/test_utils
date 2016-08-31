@@ -1,14 +1,13 @@
 package tcp_gateway;
 
 
-
-
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 /**
  * Created by tal on 1/14/16.
+ * Modified by Or on 31/08/2016
  */
 public class TLVArray extends ArrayList<TLV> {
     private static final int JUMBO_LENGTH = 2;
@@ -35,7 +34,7 @@ public class TLVArray extends ArrayList<TLV> {
                 if (valueLength == 0xff) {
                     byte[] lengthBytes = new byte[JUMBO_LENGTH];
                     msgByteBuffer.get(lengthBytes, 0, JUMBO_LENGTH);
-                    valueLength = ConvertersUtil.convertBytesToInt(lengthBytes);
+                    valueLength = ProtocolConversions.convertBytesToInt(lengthBytes);
                 }
                 byte[] decodedTlvValue;
                 //Gets the value
@@ -79,7 +78,7 @@ public class TLVArray extends ArrayList<TLV> {
             return result;
         }
         for (TLV tlv : this) {
-            result = ConvertersUtil.combineByteArrays(result, tlv.encodeTlv());
+            result = global.Conversions.combineByteArrays(result, tlv.encodeTlv());
         }
         return result;
     }

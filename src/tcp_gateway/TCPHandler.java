@@ -6,40 +6,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 /**
- * Created by tal on 8/24/16.
+ * Created by Or on 8/31/16.
  */
-public class ManageTCPAgent {
-    private static final String TAG = "TCPAgent";
+public class TCPHandler {
     private static final int SOCKET_TIMEOUT = 10 * 1000;
-    private static final int SOCKET_TIMEOUT_WATCHDOG = SOCKET_TIMEOUT - 5000;
-    private static final int SOCKET_KEEP_ALIVE_LIMIT = 36;
-    private long mLastSocketActivity = Long.MIN_VALUE;
-    private int mSocketKeepAliveCounter = 0;
     private DataOutputStream mTCPOutputStream;
     private InputStream mTCPInputStream;
-    private String url = "gwtcp.qa.gimso.net";
+
  
-
-  
-
-    public ManageTCPAgent() {
+    public TCPHandler() {
     }
+   
 
-    public boolean connectTcpSocket() {
-  
-        mSocketKeepAliveCounter = 0;
-        return createNewTcpSocket(url);
-    }
-
-    
-
+    /**
+     * Sends a Simgo protocol message over a TCP socket
+     * @param aBytes
+     * @return
+     */
     public byte[] sendMessage(byte[] aBytes) {
         return sendMessage(aBytes, (byte) 0x00);
     }
 
+    /**
+     * Sends a Simgo protocol message over a TCP socket and keeps a request ID
+     * @param aBytes
+     * @param id   A request identifier
+     * @return
+     */
     private byte[] sendMessage(byte[] aBytes, byte id) {
         byte[] buffer = new byte[256];
 
@@ -48,7 +43,7 @@ public class ManageTCPAgent {
             mTCPOutputStream.write(aBytes);
 
             mTCPOutputStream.flush();
-            System.out.println( String.format("Sending request id:0x%02x request:%s", id, ConvertersUtil.byteArrayToHexString(aBytes)));
+            System.out.println( String.format("Sending request id:0x%02x request:%s", id, global.Conversions.byteArrayToHexString(aBytes)));
 
             bytesRead = mTCPInputStream.read(buffer);
 
@@ -60,9 +55,11 @@ public class ManageTCPAgent {
             return null;
         }
     }
-
-
-    
+   
+    /** Creates a TCP Socket for a URL with default port
+     * @param cloudUrl
+     * @return
+     */
     public boolean createNewTcpSocket(String cloudUrl) {
     	return createNewTcpSocket(cloudUrl, 5151);
     }
@@ -72,10 +69,24 @@ public class ManageTCPAgent {
     	
     }
    
-   public boolean createNewTcpSocket (String cloudUrl, boolean closeSocket, long milliseconds) {
+   /** Creates a TCP socket with a url and a port
+ * @param cloudUrl
+ * @param closeSocket
+ * @param milliseconds
+ * @return
+ */
+public boolean createNewTcpSocket (String cloudUrl, boolean closeSocket, long milliseconds) {
 	   return createNewTcpSocket(cloudUrl, 5150, closeSocket, milliseconds);
    }
 
+    /**
+     * Creates a TCP socket given a URL and a port
+     * @param cloudUrl  The cloudUrl instance to use
+     * @param port  The TCP port to be used
+     * @param closeSocket  If true - socket is closed immediately. If false - wait milliseconds before closing
+     * @param milliseconds time to wait before closing the socket if closeSocket is true
+     * @return  true if success
+     */
     public boolean createNewTcpSocket(String cloudUrl,int port, boolean closeSocket, long milliseconds) {
         try {
             Socket TCPSocket = new Socket();
@@ -93,20 +104,17 @@ public class ManageTCPAgent {
             
             
             if (closeSocket == true){
-            	TCPSocket.close();
             	return true;
             }
             
             else{
             	try {
 					Thread.sleep(milliseconds);
-					TCPSocket.close();
 					return true;
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-					TCPSocket.close();
 					return false;
+	
 				}
             }
             

@@ -70,7 +70,7 @@ public class TLV {
         ByteArray tlvArrayList = new ByteArray();
         boolean isJumbo = value > 0xff;
         do {
-            tlvArrayList.add(0, ConvertersUtil.convertIntToByte(value & 0xff));
+            tlvArrayList.add(0, ProtocolConversions.convertIntToByte(value & 0xff));
             value = value - 0xff;
         } while (value > 0);
         if (isJumbo) {

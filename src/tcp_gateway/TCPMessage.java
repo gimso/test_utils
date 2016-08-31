@@ -21,6 +21,7 @@ public class TCPMessage {
     private boolean isResponse;
     private byte[] mMessage;
     private byte mResultCode;
+    private String mAuthResponse;
 
     /**
      * Constructor for the class
@@ -36,10 +37,14 @@ public class TCPMessage {
 
         if (isResponse) {
             TLV responseCode = mTLVArray.get(Tag.RESULT_CODE);
+            TLV authResponse = mTLVArray.get(Tag.AUTHENTICATION_RESPONSE);
             if (responseCode == null) {
                 throw new IllegalArgumentException("Received response with no result code");
             }
-            mResultCode = (byte)ConvertersUtil.convertBytesToInt(responseCode.getValue());
+            mResultCode = (byte)ProtocolConversions.convertBytesToInt(responseCode.getValue());
+            if (authResponse != null) {
+            mAuthResponse = global.Conversions.byteArrayToHexString((authResponse.getValue()));
+            }
         }
     }
 
@@ -61,7 +66,11 @@ public class TCPMessage {
     public byte getResultCode() {
         return mResultCode;
     }
-
+    
+    public String getAuthResponse() {
+    	return mAuthResponse;
+    }
+    
     public byte getId() {
         return mId;
     }
@@ -80,7 +89,7 @@ public class TCPMessage {
 
     @Override
     public String toString() {
-        return String.format("SVCP message id(0x%02x) opcode(%s) %s",
+        return String.format("Simgo Protocol message id(0x%02x) opcode(%s) %s",
                 mId, Opcode.getName(mOpcode), isResponse ? "Response:" + ResultCodes.getName(mResultCode) : "Request");
     }
 
@@ -119,7 +128,7 @@ public class TCPMessage {
         }
         byte[] header = createHeader(aOpcodeValue, tlvsLength);
         if (tlvsLength > 0) {
-            return ConvertersUtil.combineByteArrays(header, encodedTlvs);
+            return global.Conversions.combineByteArrays(header, encodedTlvs);
         } else {
             return header;
         }
