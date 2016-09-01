@@ -21,7 +21,7 @@ import global.PropertiesUtil;
  */
 public class TelesHttpInterface  {
 	
-	static String teles_url = PropertiesUtil.getInstance().getProperty( "TELES_URL");
+	static String teles_url = PropertiesUtil.getInstance("Resources/Dyno.properties").getProperty( "TELES_URL");
 
 
 	/**
