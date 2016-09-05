@@ -29,10 +29,13 @@ public class ProtocolInterface  {
 	 */
 	public byte[] constructAuthenticationRequest(byte[] allocationId, String authKey, String deviceId) {
 	    TLVArray tlvs = new TLVArray(3);
-	    // Check If auth key length is even, else add "-1"
+	    byte [] validationError = new byte [] {0x00};
+	    // Check If auth key length is even, else print err and return
 	    if ((authKey.length() %2)!=0) 
 	    {
-	    	authKey = authKey.concat("-1");
+	       System.err.println("AuthKey Must Be even");
+	       return validationError;
+	       
 	    }
 	    
 	    // Construct TLVs
