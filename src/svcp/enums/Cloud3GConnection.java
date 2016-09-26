@@ -12,14 +12,14 @@ package svcp.enums;
  * @author Yehuda
  *
  */
-public enum CloudConnection {
+public enum Cloud3GConnection {
 
 	HOST_IS_DISCONNECTED_FROM_CLOUD((byte) 0x00), 
 	HOST_IS_CONNECTED_FROM_CLOUD((byte) 0x01);
 
 	private byte value;
 
-	CloudConnection(byte aValue) {
+	Cloud3GConnection(byte aValue) {
 		this.value = aValue;
 	}
 
@@ -28,14 +28,14 @@ public enum CloudConnection {
 	}
 
 	/**
-	 * Gets PowerSupplyFromMe by value
+	 * Gets Cloud3GConnection by value
 	 * 
 	 * @param intValue
-	 * @return PowerSupplyFromMe
+	 * @return Cloud3GConnection
 	 */
-	public static CloudConnection getPowerSupplyMode(int intValue) {
+	public static Cloud3GConnection getCloud3GConnection(int intValue) {
 		byte value = (byte) intValue;
-		for (CloudConnection cloudConnection : CloudConnection.values())
+		for (Cloud3GConnection cloudConnection : Cloud3GConnection.values())
 			if (cloudConnection.getValue() == value)
 				return cloudConnection;
 

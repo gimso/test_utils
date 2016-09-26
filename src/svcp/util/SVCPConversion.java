@@ -255,8 +255,12 @@ public class SVCPConversion {
 			case POWER_SUPPLY_FROM_ME:
 				return PowerSupplyFromMe.getPowerSupplyMode(byteArraysToInt(value)).name();
 			// Is power supply from me on/off
-			case CLOUD_CONNECTION:
-				return PowerSupplyFromMe.getPowerSupplyMode(byteArraysToInt(value)).name();
+			case CLOUD_3G_CONNECTION:
+				return Cloud3GConnection.getCloud3GConnection(byteArraysToInt(value)).name();
+			case ME_MODEM_4G_ONLINE:
+				return MeModem4gOnline.getMeModem4gOnline(byteArraysToInt(value)).name();
+			case SET_FILES_OPTIONS:
+				return SetFilesOptions.getPowerSupplyMode(byteArraysToInt(value)).name();
 			case ALLOWED_MODULES:
 				return AllowedModule.getAllowedModules(value).toString();	
 			default:
@@ -264,6 +268,7 @@ public class SVCPConversion {
 		}
 		return new String(value);
 	}
+	
 
 	/**
 	 * Calculates the header CRC
@@ -374,9 +379,8 @@ public class SVCPConversion {
 	 * @return response 
 	 */
 	public static SVCPMessage getSvcpMsg(List<String> strings, String id, String opcode, String optionalTlv) {
-		String stringPattern = VPHTestPatterns.svcpPattern(id, opcode,optionalTlv);
 		for (String s : strings) {
-			String rv = GetMatch.getMathcer(s, stringPattern, VphTestGroup.WHOLE_SVCP_MESSAGE.getValue());
+			String rv = regex.Matchers.getResult(s, VphSVCPPatterns.getSvcpPattern(id, opcode, optionalTlv), VphSVCPPatterns.SVCP_GROUP);
 			if (rv!=null) {
 				System.out.println(s);
 				return new SVCPMessage(rv);
@@ -433,7 +437,11 @@ public class SVCPConversion {
 	 */
 	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, SVCPMessage requestObj) {
 		String msgId = requestObj.getHeader().getHexId();
-		String opcode = requestObj.getHeader().getEopcode().getHexValue();
+		String opcode = "";
+		if (requestObj.getHeader() != null 
+			&& requestObj.getHeader().getEopcode() != null
+			&& requestObj.getHeader().getEopcode().getHexValue() != null)
+			opcode = requestObj.getHeader().getEopcode().getHexResponseValue();
 		return getSvcpMsg(FileUtil.listFromFile(logcatLogger.getLogCatFile()), msgId, opcode);
 	}
 		

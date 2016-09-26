@@ -182,22 +182,22 @@ public class FileUtil {
 	 */
 	public static boolean isStringExistInFile(File file, String string) {
 		List<String> listFromFile = listFromFile(file);
-		Pattern pattern = Pattern.compile("(" + string + ")" , Pattern.CASE_INSENSITIVE);
+		Pattern pattern = Pattern.compile(string, Pattern.CASE_INSENSITIVE);
 		for (String s : listFromFile) {
 			Matcher matcher = pattern.matcher(s);
 			if (matcher.find()) {
 				System.out.println("String found " + s);
-				return true;	
+				return true;
 			}
 		}
-		System.err.println("String "+string + " was not found in\n" + file.getAbsolutePath());
+		System.err.println("String " + string + " was not found in\n" + file.getAbsolutePath());
 		return false;
 	}
 	
 	/**
 	 * Create file (if not exist), and append to it the console output 
-	 */
-	public static void printConsoleOutputToFile() {
+	 */	
+	public static void printConsoleOutputToFile(boolean append) {
 		// Get today's date as a string
 		String time = TimeAndDateConvertor.dateToString(new Date(), TimeAndDateConvertor.YYYY_MM_DD);
 		// Add the time to output file
@@ -205,12 +205,19 @@ public class FileUtil {
 		System.out.println("Forward console printing to " + file.getAbsolutePath());
 		// create the file if not exist & redirect it to System.out (console) and to PrintStream (to the file)
 		try {
-			PrintStream out = new PrintStream(new FileOutputStream(file, true));
+			PrintStream out = new PrintStream(new FileOutputStream(file, append));
 			System.setOut(new PrintStream(new TeeOutputStream(System.out, out)));
 			System.setErr(new PrintStream(new TeeOutputStream(System.err, out)));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	* printConsoleOutputToFile with default append
+	*/
+	public static void printConsoleOutputToFile() {
+		printConsoleOutputToFile(true);
 	}
 	
 	/**
