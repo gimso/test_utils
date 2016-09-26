@@ -4,6 +4,7 @@ import teles_simulator.TelesHttpInterface;
 import cloudProtocol.GateKeeperInterface;
 import cloudProtocol.MessageTypes.Challenge;
 import cloudProtocol.MessageTypes.Session;
+import global.PropertiesUtil;
 
 public class CloudProtocol_Test {
 	
@@ -12,7 +13,7 @@ public class CloudProtocol_Test {
 	 	public static void main(String[] args) {
 	 		
 	 		
-	 		TelesHttpInterface teles = new TelesHttpInterface();
+	 		TelesHttpInterface teles = new TelesHttpInterface(PropertiesUtil.getInstance("Resources/Dyno.properties").getProperty( "TELES_URL"));
 	 		
 			
 			//System.out.println(teles.addSimToSimUnit("6","1","425000000000009","2g3g"));

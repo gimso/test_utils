@@ -10,6 +10,7 @@ import org.apache.tools.ant.taskdefs.Sleep;
 
 import cloudProtocol.MessageTypes.Challenge;
 import cloudProtocol.MessageTypes.Session;
+import global.PropertiesUtil;
 import global.TypeConversions;
 import tcp_gateway.*;
 
@@ -20,7 +21,7 @@ public class tcp_gateway_test {
 	 	public static void main(String[] args) {
 	 		
 	 		
-	 		TelesHttpInterface teles = new TelesHttpInterface();
+	 		TelesHttpInterface teles = new TelesHttpInterface(PropertiesUtil.getInstance("Resources/Dyno.properties").getProperty( "TELES_URL"));
 	 		
 			
 			//System.out.println(teles.addSimToSimUnit("6","1","425000000000009","2g3g"));
