@@ -11,8 +11,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import global.PropertiesUtil;
-
 
 
 /**
@@ -21,8 +19,13 @@ import global.PropertiesUtil;
  */
 public class TelesHttpInterface  {
 	
-	static String teles_url = PropertiesUtil.getInstance("Resources/Dyno.properties").getProperty( "TELES_URL");
-
+	private String teles_url;
+	
+	public TelesHttpInterface(String teles_url) {
+		this.teles_url = teles_url;
+	}
+	
+	
 
 	/**
 	 * example: addSimToSimUnit("5","1","425000000000008","2g3g");
