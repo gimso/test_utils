@@ -32,9 +32,30 @@ public enum Tag {
     POWER_SUPPLY_FROM_ME (0x11),
     ALLOW_TECHNICIAN_CODE(0x12),
 	/**
-	 * Cloud connection status report of the AP.
+	 * Cloud connection status report of the AP.</br>
+	 * Encoding: One byte with the following encoding:</br>
+	 * Host is disconnected from cloud 0x00</br>
+	 * Host is connected from cloud 0x01</br>
+	 * 
 	 */
-	CLOUD_CONNECTION(0x13),
+	CLOUD_3G_CONNECTION(0x13),
+	/**
+	 * ME modem connection status report of the AP.</br>
+	 * Encoding: One byte with the following encoding:</br>
+	 * Host is disconnected from cloud 0x00</br>
+	 * Host is connected from cloud 0x01</br>
+	 */
+	ME_MODEM_4G_ONLINE(0x14),
+	/**
+	 * "Set Files" Options (0x15)</br>
+	 * 1. Description: Defines options for "vSIM set files" (0x07) command,</br>
+	 * out of the following options: Restore RSIM 0x00</br>
+	 * In Home Country 0x01</br>
+	 * Not In Home Country (Local SIM) 0x02</br>
+	 * Unused 0xFF</br>
+	 * 2. Encoding: One byte</br>
+	 */
+	SET_FILES_OPTIONS(0x15),
     // .. *Reserved for Future Use*
     FILE_PATH(0x19),
     FILE_ID(0x1A),

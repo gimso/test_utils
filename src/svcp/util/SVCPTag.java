@@ -4,13 +4,15 @@ import global.Conversions;
 import svcp.beans.TLV;
 import svcp.enums.AllowedModule;
 import svcp.enums.ApplyUpdate;
-import svcp.enums.CloudConnection;
+import svcp.enums.Cloud3GConnection;
 import svcp.enums.FileType;
 import svcp.enums.LogLevel;
 import svcp.enums.METype;
+import svcp.enums.MeModem4gOnline;
 import svcp.enums.Mode;
 import svcp.enums.PowerSupplyFromMe;
 import svcp.enums.ResultTags;
+import svcp.enums.SetFilesOptions;
 import svcp.enums.SimGeneration;
 import svcp.enums.Tag;
 import svcp.enums.UICCRelay;
@@ -561,11 +563,25 @@ public class SVCPTag {
 	 * Host is disconnected from cloud 0x00 </br>
 	 * Host is connected from cloud 0x01 </br>
 	 */
-	public static TLV cloudConnection(CloudConnection cloudConnection) {
+	public static TLV cloud3gConnection(Cloud3GConnection cloudConnection) {
 		if (cloudConnection == null)
-			return new TLV(Tag.CLOUD_CONNECTION);
+			return new TLV(Tag.CLOUD_3G_CONNECTION);
 		else
-			return new TLV(Tag.CLOUD_CONNECTION, (byte) cloudConnection.getValue());
+			return new TLV(Tag.CLOUD_3G_CONNECTION, (byte) cloudConnection.getValue());
+	}
+	
+	public static TLV meModem4gOnline(MeModem4gOnline meModem4gOnline) {
+		if (meModem4gOnline == null)
+			return new TLV(Tag.ME_MODEM_4G_ONLINE);
+		else
+			return new TLV(Tag.ME_MODEM_4G_ONLINE, (byte) meModem4gOnline.getValue());
+	}
+	
+	public static TLV setFilesOptions(SetFilesOptions options) {
+		if (options == null)
+			return new TLV(Tag.SET_FILES_OPTIONS);
+		else
+			return new TLV(Tag.SET_FILES_OPTIONS, (byte) options.getValue());
 	}
 	
 	/**
