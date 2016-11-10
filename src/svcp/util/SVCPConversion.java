@@ -5,6 +5,8 @@ import static global.Conversions.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -164,111 +166,9 @@ public class SVCPConversion {
 	 * @return String value
 	 */
 	public static String getValueAsStringFromTagAndValue(Tag tag, byte[] value) {
+		return SVCPToString.TagToString(tag,value);
 		
-		if (value.length < 1)
-			return "EMPTY_VALUE";
-		
-		switch (tag) {
-			// ASCII TLV's
-			case FW_VERSION:
-			case HW_VERSION:
-			case CONFIGURATION_NAME:
-			case LOG_LINE:
-				return stringASCIIFromByteArray(value);
-			// Binary TLV's
-			case PACKET_PAYLOAD:
-				return "(" + value.length + " bytes)";
-			// Numbers (Hex value)
-			case FILE_DATA:
-			case AUTHENTICATION_DATA:
-			case PHONE_NUMBER:
-			case IMSI:
-			case UPDATE_SIZE:
-			case PACKET_BEGIN:
-			case PACKET_SIZE:
-			case APPLY_NOW:
-			case NAA_INIT:
-			case UICC_RESET:
-			case BOYCOTT:
-			case GET_ALL:
-				return byteArrayToHexString(value);
-			// default path / id on the vfs
-			case FILE_PATH:
-				if(value.equals(SetFiles.USIM_3G_PATH))
-					return SetFiles.USIM_3G_PATH.name();
-				else if(value.equals(SetFiles.SIM_2G_PATH))
-					return SetFiles.SIM_2G_PATH.name();
-				else
-					return byteArrayToHexString(value);
-			case FILE_ID:
-				if(value.equals(SetFiles.IMSI_FILE_ID))
-					return SetFiles.IMSI_FILE_ID.name();
-				else
-					return byteArrayToHexString(value);				
-			// ME type
-			case ME_TYPE:
-				return METype.getMEType(byteArraysToInt(value)).name();
-			// Results
-			case RESULT_TAG:
-				return ResultTags.getResultTag(value[0]).name();
-			// Mode
-			case MODE:
-				return Mode.getMode(byteArraysToInt(value)).name();
-			// Apply Update
-			case APPLY_UPDATE:
-				return ApplyUpdate.getApplyUpdate(byteArraysToInt(value)).name();
-			// UICC Source and Destination
-			case UICC_RELAY:
-				if(value.length==1)
-					return  " UICC relay value[]=" + UICCRelay.getUICCRelay(value[0]);
-				else if (value[0] < 0 && value[1] > -1)
-					return  " UICC relay value [0] < 0,  value[1]=" + UICCRelay.getUICCRelay(value[1]);
-				else if (value[1] < 0 && value[0] > -1)
-					return  " UICC relay value [1] < 0,  value[0]=" + UICCRelay.getUICCRelay(value[0]);
-				else if (value[0] < 0 && value[1] < 0)
-					return  " UICC relay value[0] and  value[1] is < 0";
-				else	{
-				UICCRelay uiccRelay1 = UICCRelay.getUICCRelay(value[0]);
-				UICCRelay uiccRelay2 = UICCRelay.getUICCRelay(value[1]);
-				String src =  uiccRelay1 != null 
-						? 	uiccRelay1.name()
-						:	String.format("%X",value[0]);
-				String dest = uiccRelay2 != null
-						?	uiccRelay2.name()
-						:	String.format("%X",value[1]);
-				return "Source: " +src+"\t,Destination: " +dest;
-				}
-			// File Type
-			case FILE_TYPE:
-				return FileType.getFileType(byteArraysToInt(value)).name();
-			// Log Level TLV
-			case LOG_LEVEL:
-				return LogLevel.getLogLevel(byteArraysToInt(value)).name();
-			// vSim type
-			case VSIM_TYPE:
-				return VsimType.getVsim(byteArraysToInt(value)).name();	
-			// SIM generation 3g/4g
-			case SIM_GENERATION:
-				SimGeneration simGeneration = SimGeneration.getSimGeneration(byteArraysToInt(value));
-				return simGeneration != null ? simGeneration.name() : String.format("%X", simGeneration);
-			// Is power supply from me on/off
-			case POWER_SUPPLY_FROM_ME:
-				return PowerSupplyFromMe.getPowerSupplyMode(byteArraysToInt(value)).name();
-			// Is power supply from me on/off
-			case CLOUD_3G_CONNECTION:
-				return Cloud3GConnection.getCloud3GConnection(byteArraysToInt(value)).name();
-			case ME_MODEM_4G_ONLINE:
-				return MeModem4gOnline.getMeModem4gOnline(byteArraysToInt(value)).name();
-			case SET_FILES_OPTIONS:
-				return SetFilesOptions.getPowerSupplyMode(byteArraysToInt(value)).name();
-			case ALLOWED_MODULES:
-				return AllowedModule.getAllowedModules(value).toString();	
-			default:
-				break;
-		}
-		return new String(value);
 	}
-	
 
 	/**
 	 * Calculates the header CRC
@@ -379,14 +279,54 @@ public class SVCPConversion {
 	 * @return response 
 	 */
 	public static SVCPMessage getSvcpMsg(List<String> strings, String id, String opcode, String optionalTlv) {
+		Pattern pattern = VphSVCPPatterns.getSvcpPattern(id, opcode, optionalTlv);
 		for (String s : strings) {
-			String rv = regex.Matchers.getResult(s, VphSVCPPatterns.getSvcpPattern(id, opcode, optionalTlv), VphSVCPPatterns.SVCP_GROUP);
-			if (rv!=null) {
-				System.out.println(s);
-				return new SVCPMessage(rv);
-			}	
-		}
+  			Matcher matcher = pattern.matcher(s);
+  			if (matcher.find()) {		  
+  				
+					// printSvcp(sc.next());
+  				List<SVCPMessage> svcpMessages = printSvcps(matcher.group(VphSVCPPatterns.SVCP_GROUP));
+  				for(SVCPMessage msg : svcpMessages)
+  					if(Integer.valueOf(msg.getHeader().getId()).equals(Integer.valueOf(Conversions.hexStringToDecimalInt(id))))
+  						return msg;
+//  				SVCPMessage svcpMessage = new SVCPMessage(matcher.group(name));
+//  				System.out.println("SVCP found\n" + svcpMessage);	
+//				return svcpMessage;		
+  			}		  
+  		}		  		
 		return null;
+	}
+	
+	public static List<SVCPMessage> printSvcps(String svcps) {
+		int headerLength = 12;
+		int totalLength = svcps.length();
+		int remainingLength = totalLength;
+
+		int beginIndex = 0;
+		int beginLengthIndex = 6;
+		int endLengthIndex = beginLengthIndex + 4;
+		List<SVCPMessage> svcpMessages = new ArrayList<>();
+		while (remainingLength>0) {
+			//System.err.println("remaining:\t"+svcps.substring(beginIndex,totalLength));
+			String substring = svcps.substring(beginLengthIndex, endLengthIndex);
+			int hexStringToDecimalInt = Conversions.hexStringToDecimalInt(substring) * 2;
+			//System.out.println(substring);
+			int packetLength = headerLength + hexStringToDecimalInt;
+
+			if (remainingLength < packetLength){
+				//System.err.println("Wrong SVCP structure, length is too long\n"+svcps.substring(beginIndex,totalLength));
+				break;
+			}
+			String singelSvcp = svcps.substring(beginIndex, beginIndex + packetLength);
+			svcpMessages.add(new SVCPMessage(singelSvcp));
+
+			beginIndex += packetLength;
+			beginLengthIndex = beginIndex + 6;
+			endLengthIndex = beginLengthIndex + 4;
+			remainingLength -= packetLength;
+		}
+		//svcpMessages.forEach(System.out::println);
+		return svcpMessages;
 	}
 	
 	/**
@@ -436,12 +376,16 @@ public class SVCPConversion {
 	 * @return SVCPMessage
 	 */
 	public static SVCPMessage extractResponseFromLogcatLogger(LogcatLogger logcatLogger, SVCPMessage requestObj) {
-		String msgId = requestObj.getHeader().getHexId();
-		String opcode = "";
-		if (requestObj.getHeader() != null 
-			&& requestObj.getHeader().getEopcode() != null
-			&& requestObj.getHeader().getEopcode().getHexValue() != null)
-			opcode = requestObj.getHeader().getEopcode().getHexResponseValue();
+		String msgId = null;
+		String opcode = null;
+		if (requestObj.getHeader() != null) {
+			if (requestObj.getHeader().getHexId() != null) {
+				msgId = requestObj.getHeader().getHexId();
+			}
+			if (requestObj.getHeader().getEopcode() != null
+					&& requestObj.getHeader().getEopcode().getHexValue() != null)
+				opcode = requestObj.getHeader().getEopcode().getHexValue();
+		}
 		return getSvcpMsg(FileUtil.listFromFile(logcatLogger.getLogCatFile()), msgId, opcode);
 	}
 		

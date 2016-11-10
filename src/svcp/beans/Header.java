@@ -255,12 +255,12 @@ public class Header {
 	public String toString() {	
 		StringBuilder builder = new StringBuilder();
 		builder.append("Header ");
-		builder.append("[Version = " + this.version);
-		builder.append(", ID = " + this.id);
+		builder.append("[Version = " + String.format("%X",this.version));
+		builder.append(", ID = " + String.format("%X", this.id));
 		builder.append(", Node = " + getNode());
 		builder.append(", Opcode=");
-		builder.append(this.eopcode != null ? this.eopcode.name() + String.format("[0x%X] ", this.opcodeValue) : this.opcodeValue);
-		builder.append(", Length = " + length);
+		builder.append(this.eopcode != null ? this.eopcode.name() + String.format(" [0x%X]", this.opcodeValue) : this.opcodeValue);
+		builder.append(", Length = " + this.length);
 		builder.append(", CRC = " + String.format("%X", this.crc));
 		builder.append(", Mode = ");
 		builder.append(this.isRequest ? "Request" : "Response");
