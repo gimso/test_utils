@@ -1,4 +1,4 @@
-package unit_tests;
+package svcp.util;
 
 import static global.Conversions.hexStringToByteArray;
 
@@ -21,7 +21,6 @@ import svcp.beans.SVCPMessage;
 import svcp.beans.TLV;
 import svcp.enums.ResultTags;
 import svcp.enums.Tag;
-import svcp.util.SVCPConversion;
 
 public class SVCPs {
 	public static void main(String[] args) {

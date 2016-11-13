@@ -48,7 +48,8 @@ public enum FilePath {
 	public static FilePath getFilePath(byte[] value) {
 		if (value != null) {
 			for (FilePath filePath : FilePath.values()) {
-				if (Arrays.equals(filePath.getValue(), value))
+				byte[] tempValue = filePath.getValue();
+				if (Arrays.equals(tempValue, value))
 					return filePath;
 			}
 		}
