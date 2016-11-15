@@ -117,9 +117,7 @@ public class SVCPs {
 			try {
 				Matcher matcher = svcppattern.matcher(hexString);
 				if (matcher.find()) {
-					String opcode = matcher.group("opcode");
-					if(!opcode.equalsIgnoreCase("03"))
-						printSvcps(matcher.group(VphSVCPPatterns.SVCP_GROUP),includeLogLines,includeErrorForShortSVCPs);
+						getSvcps(matcher.group(VphSVCPPatterns.SVCP_GROUP),includeLogLines,includeErrorForShortSVCPs).forEach(System.out::println);;
 				}
 			} catch (Exception e) {
 			}
@@ -129,8 +127,9 @@ public class SVCPs {
 	/**
 	 * @param svcps
 	 * @param includeErrorForShortSVCPs 
+	 * @return 
 	 */
-	private static void printSvcps(String svcps, boolean includeLogLines, boolean includeErrorForShortSVCPs) {
+	private static List<SVCPMessage> getSvcps(String svcps, boolean includeLogLines, boolean includeErrorForShortSVCPs) {
 		int headerLength = HEADER_LENGTH;
 		int totalLength = svcps.length();
 		int remainingLength = totalLength;
@@ -164,6 +163,6 @@ public class SVCPs {
 			endLengthIndex = beginLengthIndex + 4;
 			remainingLength -= packetLength;
 		}
-		svcpMessages.forEach(System.out::println);
+		return svcpMessages;
 	}
 }

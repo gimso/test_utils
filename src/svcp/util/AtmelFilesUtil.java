@@ -15,7 +15,14 @@ import svcp.beans.TLV;
 import svcp.enums.FileId;
 import svcp.enums.MessageTypeOpcodes;
 import svcp.enums.Tag;
-
+/**
+ * This is a Util for SET_FILES:
+ * insert all the log include the set_files svcp msgs
+ * then press exit
+ * then you will see if there is a duplication
+ * @author Yehuda
+ *
+ */
 public class AtmelFilesUtil {
 	public static void main(String[] args) {
 		List<SVCPMessage> svcpMessages = extractSetFilesSvcps();
@@ -52,7 +59,7 @@ public class AtmelFilesUtil {
 		List<SVCPMessage> svcpMessages = new ArrayList<>();
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Insert the HexString svcp message:");
+		System.out.println("Insert the HexString svcp message:\nType exit to get results");
 		String hexString = "";
 		String regex = "(?<date>\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\.\\d{3}).*\\s(?<svcp>(?<header>(?<version>10)(?<id>[\\da-fA-f]{2,2})(?<opcode>[\\da-fA-f]{2,2})(?<length>[\\da-fA-f]{4})(?<crc>[\\da-fA-F]{2}))(?<tlvs>[\\da-fA-f])?[\\da-fA-f]+)";
 		Pattern svcppattern = Pattern.compile(regex);
@@ -60,10 +67,8 @@ public class AtmelFilesUtil {
 			if (hexString.equals("exit"))
 				break;
 			try {
-				boolean matchesNumbers = hexString.matches("[\\d].{6,}");
 				Matcher matcher = svcppattern.matcher(hexString);
 				if (matcher.find()) {
-
 					SVCPMessage printSvcps = printSvcps(matcher.group(VphSVCPPatterns.SVCP_GROUP),
 							MessageTypeOpcodes.SET_FILES);
 					if (printSvcps != null)
