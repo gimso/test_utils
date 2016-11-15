@@ -1,0 +1,1 @@
+adb shell am broadcast -a simgo.vsim.TUNNELING -e "tunnel_outgoing" "107B0B0002622500"

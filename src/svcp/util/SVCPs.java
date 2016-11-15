@@ -1,4 +1,4 @@
-package unit_tests;
+package svcp.util;
 
 import static global.Conversions.hexStringToByteArray;
 
@@ -21,16 +21,15 @@ import svcp.beans.SVCPMessage;
 import svcp.beans.TLV;
 import svcp.enums.ResultTags;
 import svcp.enums.Tag;
-import svcp.util.SVCPConversion;
 
 public class SVCPs {
 	public static void main(String[] args) {
-//		System.err.close();
+		// System.err.close();
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Insert the HexString svcp message:");
 		String hexString = "";
 		String regex = "(?<date>\\d{2}-\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\.\\d{3}).*\\s(?<svcp>(?<header>(?<version>10)(?<id>[\\da-fA-f]{2,2})(?<opcode>[\\da-fA-f]{2,2})(?<length>[\\da-fA-f]{4})(?<crc>[\\da-fA-F]{2}))(?<tlvs>[\\da-fA-f])?[\\da-fA-f]+)";
-		Pattern svcppattern = Pattern.compile(regex );
+		Pattern svcppattern = Pattern.compile(regex);
 		while ((hexString = sc.nextLine()) != null) {
 
 			try {
@@ -45,7 +44,7 @@ public class SVCPs {
 				} else if (matchesNumbers && hexString.startsWith("10"))
 					printSvcps(hexString);
 			} catch (Exception e) {
-			
+
 			}
 		}
 
@@ -53,7 +52,7 @@ public class SVCPs {
 
 	private static void printSvcp(String hexString) {
 		try {
-			//System.err.close();
+			// System.err.close();
 			byte[] hexStringToByteArray = Conversions.hexStringToByteArray(hexString);
 			Header tempHeader = new Header(hexStringToByteArray);
 			int firstLength = Header.HEADER_SIZE + tempHeader.getLength();
@@ -76,6 +75,7 @@ public class SVCPs {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * @param svcps
 	 */
@@ -88,15 +88,16 @@ public class SVCPs {
 		int beginLengthIndex = 6;
 		int endLengthIndex = beginLengthIndex + 4;
 		List<SVCPMessage> svcpMessages = new ArrayList<>();
-		while (remainingLength>0) {
-			//System.err.println("remaining:\t"+svcps.substring(beginIndex,totalLength));
+		while (remainingLength > 0) {
+			// System.err.println("remaining:\t"+svcps.substring(beginIndex,totalLength));
 			String substring = svcps.substring(beginLengthIndex, endLengthIndex);
 			int hexStringToDecimalInt = Conversions.hexStringToDecimalInt(substring) * 2;
-			//System.out.println(substring);
+			// System.out.println(substring);
 			int packetLength = headerLength + hexStringToDecimalInt;
 
-			if (remainingLength < packetLength){
-				System.err.println("Wrong SVCP structure, length is too long\n"+svcps.substring(beginIndex,totalLength));
+			if (remainingLength < packetLength) {
+				System.err.println(
+						"Wrong SVCP structure, length is too long\n" + svcps.substring(beginIndex, totalLength));
 				break;
 			}
 			String singelSvcp = svcps.substring(beginIndex, beginIndex + packetLength);
@@ -109,31 +110,34 @@ public class SVCPs {
 		}
 		svcpMessages.forEach(System.out::println);
 	}
+
 	public static List<SVCPMessage> getSvcpMsgs(String strings) {
 		List<SVCPMessage> svcpMessages = new ArrayList<>();
 		String defaultHexStr = "\\da-fA-f";
-		String idGroup = //(idGroup == null) 
-			//?
-					"([" + defaultHexStr + "]{2,2})"; 
-			//: "(" + idGroup + ")";
-		String opcodeGroup = //(opcodeGroup == null) 
-			//?
-					"([08]{1,1}[" + defaultHexStr + "]{1,1})";
-			//: opcodeGroup.length() < 2 ? "(0" + opcodeGroup + ")" : "(" + opcodeGroup + ")";
+		String idGroup = // (idGroup == null)
+				// ?
+				"([" + defaultHexStr + "]{2,2})";
+		// : "(" + idGroup + ")";
+		String opcodeGroup = // (opcodeGroup == null)
+				// ?
+				"([08]{1,1}[" + defaultHexStr + "]{1,1})";
+		// : opcodeGroup.length() < 2 ? "(0" + opcodeGroup + ")" : "(" +
+		// opcodeGroup + ")";
 		String lengthGroup = "([\\da-fA-f]{4,4})";
 		String svcpMsgGroup = "(10" + idGroup + opcodeGroup + lengthGroup + ".*)";
-		
-		System.out.println(svcpMsgGroup+svcpMsgGroup+svcpMsgGroup);//.substring(0, svcpMsgGroup.length()-1)+svcpMsgGroup+svcpMsgGroup+svcpMsgGroup+svcpMsgGroup);
-	
+
+		System.out.println(svcpMsgGroup + svcpMsgGroup + svcpMsgGroup);// .substring(0,
+																		// svcpMsgGroup.length()-1)+svcpMsgGroup+svcpMsgGroup+svcpMsgGroup+svcpMsgGroup);
+
 		Pattern pattern = Pattern.compile(svcpMsgGroup, Pattern.CASE_INSENSITIVE);
-			Matcher matcher = pattern.matcher(strings);
-			while (matcher.find()) {
-				String group = matcher.group(1);
-				System.out.println(group);
-				System.err.println("SVCP Extract: "+new SVCPMessage(group));
-				svcpMessages.add(new SVCPMessage(group));
-			}	
-		
+		Matcher matcher = pattern.matcher(strings);
+		while (matcher.find()) {
+			String group = matcher.group(1);
+			System.out.println(group);
+			System.err.println("SVCP Extract: " + new SVCPMessage(group));
+			svcpMessages.add(new SVCPMessage(group));
+		}
+
 		return svcpMessages;
 	}
 
@@ -207,68 +211,67 @@ public class SVCPs {
 		}
 		return SVCPlist;
 	}
+
 	public static List<SVCPMessage> allMsgFromFile;
-	
-		public static void resultAssertion(File logCatFile, ResultTags resultTag) {
-			List<SVCPMessage> allMsgsFromFile = getAllMsgsFromFile(logCatFile);
-			for (SVCPMessage svcpMessage : allMsgsFromFile){
-				Assert.assertNotNull(svcpMessage, "Response Message is null");
-				Assert.assertTrue(!svcpMessage.getTlvs().isEmpty(),"TLV list is empty");
-				TLV result = svcpMessage.getTlvs()
-										.stream()
-										.filter(tlv -> tlv.getType().equals(Tag.RESULT_TAG))
-										.findFirst()
-										.orElse(null);
-				Assert.assertNotNull(result);
-				
-				String actual = svcpMessage.getTlvByTag(Tag.RESULT_TAG).getStringValue();
-				String expected = resultTag.name();
-				String reason = "Result value doesn't much the expected result ("+resultTag.name()+")";
-				MatcherAssert.assertThat(reason,actual, Matchers.containsString(expected));
-				
-			}
+
+	public static void resultAssertion(File logCatFile, ResultTags resultTag) {
+		List<SVCPMessage> allMsgsFromFile = getAllMsgsFromFile(logCatFile);
+		for (SVCPMessage svcpMessage : allMsgsFromFile) {
+			Assert.assertNotNull(svcpMessage, "Response Message is null");
+			Assert.assertTrue(!svcpMessage.getTlvs().isEmpty(), "TLV list is empty");
+			TLV result = svcpMessage.getTlvs().stream().filter(tlv -> tlv.getType().equals(Tag.RESULT_TAG)).findFirst()
+					.orElse(null);
+			Assert.assertNotNull(result);
+
+			String actual = svcpMessage.getTlvByTag(Tag.RESULT_TAG).getStringValue();
+			String expected = resultTag.name();
+			String reason = "Result value doesn't much the expected result (" + resultTag.name() + ")";
+			MatcherAssert.assertThat(reason, actual, Matchers.containsString(expected));
+
 		}
-	
-		public static List<SVCPMessage> getAllMsgsFromFile(File file) {
-			String hexString;
-			allMsgFromFile = new ArrayList<>();
-			try (Scanner scanner = new Scanner(file);) {
-				while ((hexString = scanner.next()) != null) {
-					boolean matchesNumbers = hexString.matches("[\\d].{6,}");
-					boolean startsWith = hexString.matches("^[Tx:|Rx:|data:|message:].*");
-					
-					if (startsWith)
-						initSvcpList(scanner.next());
-					else if (matchesNumbers && hexString.startsWith("10"))
-						initSvcpList(hexString);
-				}
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+	}
+
+	public static List<SVCPMessage> getAllMsgsFromFile(File file) {
+		String hexString;
+		allMsgFromFile = new ArrayList<>();
+		try (Scanner scanner = new Scanner(file);) {
+			while ((hexString = scanner.next()) != null) {
+				boolean matchesNumbers = hexString.matches("[\\d].{6,}");
+				boolean startsWith = hexString.matches("^[Tx:|Rx:|data:|message:].*");
+
+				if (startsWith)
+					initSvcpList(scanner.next());
+				else if (matchesNumbers && hexString.startsWith("10"))
+					initSvcpList(hexString);
 			}
-			return allMsgFromFile.isEmpty()?null:allMsgFromFile;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		private static void initSvcpList(String hexString) {
-			try {
-				byte[] hexStringToByteArray = Conversions.hexStringToByteArray(hexString);
-				Header tempHeader = new Header(hexStringToByteArray);
-				int firstLength = Header.HEADER_SIZE + tempHeader.getLength();
-				int length = hexStringToByteArray.length - firstLength;
-				byte[] tempFirst = new byte[firstLength];
-				System.arraycopy(hexStringToByteArray, 0, tempFirst, 0, firstLength);
-				byte[] tempSec = new byte[length];
-				boolean b = firstLength < hexStringToByteArray.length;
-				if (b) {
-					allMsgFromFile.add(new SVCPMessage(tempFirst));
-					System.arraycopy(hexStringToByteArray, firstLength, tempSec, 0, length);
-					allMsgFromFile.add(new SVCPMessage(tempSec));
-				} else {
-					allMsgFromFile.add(new SVCPMessage(tempFirst));
-				}
-			} catch (Exception e) {
-				//DO NOTHING;
+		return allMsgFromFile.isEmpty() ? null : allMsgFromFile;
+	}
+
+	private static void initSvcpList(String hexString) {
+		try {
+			byte[] hexStringToByteArray = Conversions.hexStringToByteArray(hexString);
+			Header tempHeader = new Header(hexStringToByteArray);
+			int firstLength = Header.HEADER_SIZE + tempHeader.getLength();
+			int length = hexStringToByteArray.length - firstLength;
+			byte[] tempFirst = new byte[firstLength];
+			System.arraycopy(hexStringToByteArray, 0, tempFirst, 0, firstLength);
+			byte[] tempSec = new byte[length];
+			boolean b = firstLength < hexStringToByteArray.length;
+			if (b) {
+				allMsgFromFile.add(new SVCPMessage(tempFirst));
+				System.arraycopy(hexStringToByteArray, firstLength, tempSec, 0, length);
+				allMsgFromFile.add(new SVCPMessage(tempSec));
+			} else {
+				allMsgFromFile.add(new SVCPMessage(tempFirst));
 			}
-			
+		} catch (Exception e) {
+			// DO NOTHING;
 		}
+
+	}
 }
 
 // // System.out.println(x.substring(0, x2*2));

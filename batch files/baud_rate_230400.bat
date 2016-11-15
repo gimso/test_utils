@@ -1,0 +1,1 @@
+adb shell am broadcast -a simgo.deviceutil.ACTION_SET_BAUD_RATE --ei baud_rate 230400
