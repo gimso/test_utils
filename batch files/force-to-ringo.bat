@@ -1,0 +1,1 @@
+adb shell am broadcast -a simgo.servers.FORCE_CLOUD -e force_cloud http://gw.ringo.gimso.net:80

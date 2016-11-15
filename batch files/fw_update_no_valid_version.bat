@@ -1,0 +1,2 @@
+adb push "C:\Users\Yehuda\Downloads\vsim_v4.1.3.201606011944_global_vph.sgo" /sdcard/
+adb shell am broadcast -a simgo.vsim.FW_UPDATE --es fw_path /sdcard/vsim_v4.1.3.201606011944_global_vph.sgo --es fw_version 4.1.9
