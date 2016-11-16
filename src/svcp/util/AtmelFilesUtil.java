@@ -13,13 +13,14 @@ import regex.VphSVCPPatterns;
 import svcp.beans.SVCPMessage;
 import svcp.beans.TLV;
 import svcp.enums.FileId;
+import svcp.enums.FilePath;
 import svcp.enums.MessageTypeOpcodes;
 import svcp.enums.Tag;
+
 /**
- * This is a Util for SET_FILES:
- * insert all the log include the set_files svcp msgs
- * then press exit
- * then you will see if there is a duplication
+ * This is a Util for SET_FILES: insert all the log include the set_files svcp
+ * msgs then press exit then you will see if there is a duplication
+ * 
  * @author Yehuda
  *
  */
@@ -35,21 +36,39 @@ public class AtmelFilesUtil {
 	public static void printFiles(List<SVCPMessage> svcpMessages) {
 		Map<FileId, String> fileIds = new HashMap<>();
 		for (SVCPMessage message : svcpMessages) {
+			if (!message.getHeader().isRequest())
+				continue;
 			TLV fileData = extractFileDataFromSVCPMsg(message);
 			TLV fileId = extractFileIdFromSVCPMsg(message);
+			TLV filePath = extractFilePathFromSVCPMsg(message);
 			FileId fileIdEnum = null;
-			if(fileId!=null&&fileId.getValue()!=null)
-			 fileIdEnum = FileId.getFileId(fileId.getValue());
-			if (fileId!=null&&fileIdEnum!=null&&!fileIds.containsKey(fileIdEnum))
-				System.out.println("*" + fileIdEnum + "," + fileData.getStringValue() + " First Time Added");
-			else if (fileIds.containsKey(fileIdEnum) && fileIds.get(fileIdEnum).equals(fileData.getStringValue()))
-				System.err.println("*" + fileIdEnum + "," + fileData.getStringValue() + " Same file Added again");
-			else if (fileIds.containsKey(fileIdEnum) && !fileIds.get(fileIdEnum).equals(fileData.getStringValue()))
-				System.out.println("*" + fileIdEnum + "," + fileData.getStringValue() + " File has changed");
-			else continue;
+			FilePath filePathEnum = null;
+			String dataValue = fileData.getStringValue();
 
-			fileIds.put(fileIdEnum, fileData.getStringValue());
+			String msg = "";
+			if (fileId != null && fileId.getValue() != null && filePath != null) {
+				fileIdEnum = FileId.getFileId(fileId.getValue());
+				filePathEnum = FilePath.getFilePath(filePath.getValue());
+				msg = "*\t" + filePathEnum + ": " + fileIdEnum + "," + dataValue;
+			}
+			if (fileId != null && fileIdEnum != null && !fileIds.containsKey(fileIdEnum)) {
+				System.out.println(msg + " First Time Added");
+			} else if (fileIds.containsKey(fileIdEnum) && fileIds.get(fileIdEnum).equals(dataValue))
+				System.err.println(msg + " Same file Added again");
+			else if (fileIds.containsKey(fileIdEnum) && !fileIds.get(fileIdEnum).equals(dataValue))
+				System.out.println(msg + " File has changed");
+			else
+				continue;
+
+			fileIds.put(fileIdEnum, dataValue);
 		}
+	}
+
+	private static TLV extractFilePathFromSVCPMsg(SVCPMessage message) {
+		for (TLV tlv : message.getTlvs())
+			if (tlv.getType().equals(Tag.FILE_PATH))
+				return tlv;
+		return null;
 	}
 
 	/**
@@ -73,8 +92,8 @@ public class AtmelFilesUtil {
 							MessageTypeOpcodes.SET_FILES);
 					if (printSvcps != null)
 						svcpMessages.add(printSvcps);
-					System.out.println("1 msg added svcps size = " + svcpMessages.size());
-				} 
+					System.out.println("a msg added, svcps size = " + svcpMessages.size());
+				}
 			} catch (Exception e) {
 			}
 		}
